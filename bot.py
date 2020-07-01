@@ -1,22 +1,23 @@
 import discord
+from discord.ext import commands
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='!')
 
-@client.event
+@bot.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print(f'We have logged in as {bot.user}')
 
-#gh
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command()
+async def ping(ctx):
+    await ctx.send('Pong!')
 
-    if message.content.startswith('!ping'):
-        await message.channel.send('Pong!')
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
 
-#Send a message when a member joins
+@bot.event
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
 
-client.run('NjkwNTQ0NTcxNzE2NzMwODkx.XvsWYQ.bI_1g6vEmMOg1kQE_xIBJtTP9G8')
+bot.run('NjkwNTQ0NTcxNzE2NzMwODkx.XvsWYQ.bI_1g6vEmMOg1kQE_xIBJtTP9G8')
