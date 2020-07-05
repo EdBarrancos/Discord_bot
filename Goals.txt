@@ -37,5 +37,10 @@ Afk channel
 ------------------------------
 
 Next need to be done:
-	Update the loop that creates channels and categories. Store them properly
-	Finish the constructor functions in channel_category.py
+	Update the loop that creates channels and categories. Store them properly NOT NEEDED
+	Finish the constructor functions in channel_category.py CHECK
+
+Next:
+	Problem with channel creation
+	Anouncement premissions
+	Create characters

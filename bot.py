@@ -13,36 +13,38 @@ from discord.ext import commands
 bot = commands.Bot(command_prefix='!')
 
 # Name of the channels and categories managed by the bot
-anouncementChannel = 'Anouncements'
-dndcategory = 'DNDTIME'
+anouncChannelName = 'Anouncements'
+dndCatName = 'DNDTIME'
 
 
 
 @bot.event
 async def on_ready():
-    global dndcategory
-    global anouncementChannel
+    global dndCatName
+    global anouncChannelName
 
     print(f'We have logged in as {bot.user}')
     print(bot.guilds)
 
     # Create a category and channels
-    # Missing a counter and store the categories and channels in lists or dic  
     for guild in bot.guilds:
-        # category
-        dndcat = await find_category(guild, dndcategory)
+        print(f'In {guild}:')
+        dndcat = await find_category(guild, dndCatName)
         if not dndcat:
-            dndcategory = await guild.create_category(dndcategory)
-            print(f'{dndcategory} created')
-            anouncementChannel = await dndcategory.create_text_channel(anouncementChannel, position = 0)
-            print(f'{anouncementChannel} created')
-        else:
-            print(f'{dndcategory} already exists in {guild.name}')
-            dndcategory = dndcat
-            anounc = await find_channel(dndcategory, anouncementChannel)
-            if not anounc:
-                anouncementChannel = dndcategory.create_text_channel()
+            dndcat = await guild.create_category(dndCatName)
+            print(f'{dndcat} created')
 
+            anounc = await dndcat.create_text_channel(anouncChannelName, position=0)
+            print(f'{anounc} created')
+        else:
+            print(f'{dndcat} already exists')
+            anounc = await find_channel(dndcat, anouncChannelName)
+            if not anounc:
+                anounc = await dndcat.create_text_channel(anouncChannelName)
+                print(f'{anounc} created')
+            else: print(f'{anounc} already exists')
+
+        print(f'Finished in {guild}')
         await asyncio.sleep(0.01)
 
 
