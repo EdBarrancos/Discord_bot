@@ -1,0 +1,47 @@
+Role management.
+When ready crazy creates a channel if not created yet.
+Will send a message for people to choose role and add reactions.
+Each reactions will have a role attached
+Create roles if not yet created
+Also explain all the roles and functionalities
+
+------------------------------
+
+use on dnd channel
+Way to contact me or I contact other players
+    Like command which will send a message to the DM
+Count Xp and levels
+Create characters in the discord as other users? But connected to their account
+Create instances for magic items. I can atribute them to characters and take them away
+Manage channel where I will summarize each session
+
+------------------------------
+
+Roles
+Player and DM
+The players receive in game xp and discord xp.
+Like talking and stuff
+
+------------------------------
+
+DnD channels folder:
+Welcome channel
+	Welcome channel create and check if it created
+	Sends welcome message
+Channel for leveling up
+Channel for DM Anouncements
+Create and delete specific channels for each thingy
+Channel for General anouncements
+
+Afk channel
+------------------------------
+
+Next need to be done:
+	Update the loop that creates channels and categories. Store them properly NOT NEEDED
+	Finish the constructor functions in channel_category.py CHECK
+
+Next:
+	Problem with channel creation CHECK
+	Token hidden CHECK
+	Anouncement premissions
+	Create characters

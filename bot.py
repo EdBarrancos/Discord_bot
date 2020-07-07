@@ -1,22 +1,74 @@
+""" 
+    File: bot.py
+    Author: Eduardo Barrancos
+    Description: Bot that manages a category in your server used for dnd or other games porposes
+"""
+from channel_category import *
+
 import discord
+import asyncio
+import json
+from discord.ext import commands
 
-client = discord.Client()
+# Import TOKEN
+import os
+os.chdir('../')
+with open("Discord_bot.json", "r") as f:
+    data = json.load(f)
+    TOKEN = data['token']
 
-@client.event
+
+# The bot instance
+bot = commands.Bot(command_prefix='!')
+
+# Name of the channels and categories managed by the bot
+anouncChannelName = 'Anouncements'
+dndCatName = 'DNDTIME'
+
+
+
+@bot.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    global dndCatName
+    global anouncChannelName
 
-#gh
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    print(f'We have logged in as {bot.user}')
+    print(bot.guilds)
 
-    if message.content.startswith('!ping'):
-        await message.channel.send('Pong!')
+    # Create a category and channels
+    for guild in bot.guilds:
+        print(f'In {guild}:')
+        dndcat = await find_category(guild, dndCatName)
+        if not dndcat:
+            dndcat = await guild.create_category(dndCatName)
+            print(f'{dndcat} created')
 
-#Send a message when a member joins
+            anounc = await dndcat.create_text_channel(anouncChannelName, position=0)
+            print(f'{anounc} created')
+        else:
+            print(f'{dndcat} already exists')
+            anounc = await find_channel(dndcat, anouncChannelName)
+            if not anounc:
+                anounc = await dndcat.create_text_channel(anouncChannelName)
+                print(f'{anounc} created')
+            else: print(f'{anounc} already exists')
+
+        await anounc.set_permissions(guild.default_role, read_messages=True, send_messages=False)
+        print(f'Finished in {guild}')
+        await asyncio.sleep(0.01)
+
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send('Pong!')
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+@bot.event
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
 
-client.run('NjkwNTQ0NTcxNzE2NzMwODkx.XvsWYQ.bI_1g6vEmMOg1kQE_xIBJtTP9G8')
+bot.run(TOKEN)
