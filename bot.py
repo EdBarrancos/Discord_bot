@@ -7,7 +7,16 @@ from channel_category import *
 
 import discord
 import asyncio
+import json
 from discord.ext import commands
+
+# Import TOKEN
+import os
+os.chdir('../')
+with open("Discord_bot.json", "r") as f:
+    data = json.load(f)
+    TOKEN = data['token']
+
 
 # The bot instance
 bot = commands.Bot(command_prefix='!')
@@ -44,6 +53,7 @@ async def on_ready():
                 print(f'{anounc} created')
             else: print(f'{anounc} already exists')
 
+        await anounc.set_permissions(guild.default_role, read_messages=True, send_messages=False)
         print(f'Finished in {guild}')
         await asyncio.sleep(0.01)
 
@@ -61,4 +71,4 @@ async def add(ctx, left: int, right: int):
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
 
-bot.run('NjkwNTQ0NTcxNzE2NzMwODkx.XvsWYQ.bI_1g6vEmMOg1kQE_xIBJtTP9G8')
+bot.run(TOKEN)
