@@ -42,5 +42,6 @@ Next need to be done:
 
 Next:
 	Problem with channel creation CHECK
+	Token hidden CHECK
 	Anouncement premissions
 	Create characters
