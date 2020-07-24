@@ -5,8 +5,11 @@ Each reactions will have a role attached
 Create roles if not yet created
 Also explain all the roles and functionalities
 
+<<<<<<< Updated upstream
 ------------------------------
 
+=======
+>>>>>>> Stashed changes
 use on dnd channel
 Way to contact me or I contact other players
     Like command which will send a message to the DM
@@ -15,15 +18,21 @@ Create characters in the discord as other users? But connected to their account
 Create instances for magic items. I can atribute them to characters and take them away
 Manage channel where I will summarize each session
 
+<<<<<<< Updated upstream
 ------------------------------
 
+=======
+>>>>>>> Stashed changes
 Roles
 Player and DM
 The players receive in game xp and discord xp.
 Like talking and stuff
 
+<<<<<<< Updated upstream
 ------------------------------
 
+=======
+>>>>>>> Stashed changes
 DnD channels folder:
 Welcome channel
 	Welcome channel create and check if it created
@@ -31,6 +40,7 @@ Welcome channel
 Channel for leveling up
 Channel for DM Anouncements
 Create and delete specific channels for each thingy
+<<<<<<< Updated upstream
 Channel for General anouncements
 
 Afk channel
@@ -47,3 +57,6 @@ Next:
 	Roll dices
 	Roll nbr of dice| size of dice + something
 	Create characters
+=======
+Channel for General anouncements
+>>>>>>> Stashed changes

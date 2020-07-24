@@ -62,9 +62,16 @@ async def on_ready():
         await asyncio.sleep(0.01)
 
 
+
 @bot.command()
 async def ping(ctx):
     await ctx.send('Pong!')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
 
 @bot.command()
 async def add(ctx, *nbrs : int):
@@ -73,6 +80,7 @@ async def add(ctx, *nbrs : int):
     for nbr in nbrs:
         sum += nbr
     await ctx.send(sum)
+
 
 @bot.command()
 async def roll(ctx):
@@ -101,8 +109,10 @@ async def roll(ctx):
 
         Make some functions in other file
  """
+
 @bot.event
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
 
 bot.run(TOKEN)
+
