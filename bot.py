@@ -62,16 +62,16 @@ async def on_ready():
         await asyncio.sleep(0.01)
 
 
-<<<<<<< Updated upstream
+
 @bot.command()
 async def ping(ctx):
     await ctx.send('Pong!')
-=======
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
->>>>>>> Stashed changes
+
 
 @bot.command()
 async def add(ctx, *nbrs : int):
@@ -81,19 +81,38 @@ async def add(ctx, *nbrs : int):
         sum += nbr
     await ctx.send(sum)
 
-<<<<<<< Updated upstream
+
+@bot.command()
+async def roll(ctx):
+    """  Synopsis:
+    !roll xdx [OPTIONS]
+
+    Description:
+
+        xdx : Denotes how many dice to roll and how many sides the dice have.
+
+    The following options are available:
+
+        + - / * : Static modifier
+
+        k# : How many dice to keep out of the roll, keeping highest value.
+
+        r# : Reroll value.
+
+        ir# : Indefinite reroll value.
+
+        t# : Target number for a success.
+
+        f# : Target number for a failure.
+
+        ! : Any text after ! will be a comment.
+
+        Make some functions in other file
+ """
+
 @bot.event
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
 
 bot.run(TOKEN)
-=======
-#Send a message when a member joins
-@client.event
-async def on_member_join(member):
-    await member.message(f'Hi, welcome {member.name}!')
 
-
-
-client.run('NjkwNTQ0NTcxNzE2NzMwODkx.XvsWYQ.bI_1g6vEmMOg1kQE_xIBJtTP9G8')
->>>>>>> Stashed changes
