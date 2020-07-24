@@ -74,6 +74,33 @@ async def add(ctx, *nbrs : int):
         sum += nbr
     await ctx.send(sum)
 
+@bot.command()
+async def roll(ctx):
+    """  Synopsis:
+    !roll xdx [OPTIONS]
+
+    Description:
+
+        xdx : Denotes how many dice to roll and how many sides the dice have.
+
+    The following options are available:
+
+        + - / * : Static modifier
+
+        k# : How many dice to keep out of the roll, keeping highest value.
+
+        r# : Reroll value.
+
+        ir# : Indefinite reroll value.
+
+        t# : Target number for a success.
+
+        f# : Target number for a failure.
+
+        ! : Any text after ! will be a comment.
+
+        Make some functions in other file
+ """
 @bot.event
 async def on_member_join(member):
     await member.message(f'Hi, welcome {member.name}!')
