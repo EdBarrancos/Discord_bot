@@ -13,7 +13,7 @@ Category and Channel Creation
 
 It creates a category for DnD where it will operate
 
-It creates a "anoucement" channel
+It creates a "announcement" channel
 
 Commands
 ---
@@ -21,6 +21,5 @@ Commands
 -> !ping
 Pong!
 
--> !add <n1> <n2>
-n1 + n2
-
+-> !add nbrs
+sum(nbrs)

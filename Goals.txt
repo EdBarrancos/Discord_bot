@@ -43,5 +43,7 @@ Next need to be done:
 Next:
 	Problem with channel creation CHECK
 	Token hidden CHECK
-	Anouncement premissions
+	Anouncement premissions ALMOST CHECK
+	Roll dices
+	Roll nbr of dice| size of dice + something
 	Create characters

@@ -22,7 +22,7 @@ with open("Discord_bot.json", "r") as f:
 bot = commands.Bot(command_prefix='!')
 
 # Name of the channels and categories managed by the bot
-anouncChannelName = 'Anouncements'
+anouncChannelName = 'Announcements'
 dndCatName = 'DNDTIME'
 
 
@@ -53,7 +53,11 @@ async def on_ready():
                 print(f'{anounc} created')
             else: print(f'{anounc} already exists')
 
-        await anounc.set_permissions(guild.default_role, read_messages=True, send_messages=False)
+        for member in guild.default_role.members:
+            if not member.bot:
+                #Other bots will have access to channel. Improve
+                await anounc.set_permissions(member, read_messages=True, send_messages=False)
+
         print(f'Finished in {guild}')
         await asyncio.sleep(0.01)
 
@@ -63,9 +67,12 @@ async def ping(ctx):
     await ctx.send('Pong!')
 
 @bot.command()
-async def add(ctx, left: int, right: int):
-    """Adds two numbers together."""
-    await ctx.send(left + right)
+async def add(ctx, *nbrs : int):
+    """Adds numbers together."""
+    sum = 0
+    for nbr in nbrs:
+        sum += nbr
+    await ctx.send(sum)
 
 @bot.event
 async def on_member_join(member):
