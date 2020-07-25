@@ -4,6 +4,7 @@
     Description: Bot that manages a category in your server used for dnd or other games porposes
 """
 from channel_category import *
+from dice import Dice
 
 import discord
 import asyncio
@@ -22,10 +23,8 @@ with open("Discord_bot.json", "r") as f:
 bot = commands.Bot(command_prefix='!')
 
 # Name of the channels and categories managed by the bot
-anouncChannelName = 'Anouncements'
+anouncChannelName = 'Announcements'
 dndCatName = 'DNDTIME'
-
-
 
 @bot.event
 async def on_ready():
@@ -63,9 +62,51 @@ async def ping(ctx):
     await ctx.send('Pong!')
 
 @bot.command()
-async def add(ctx, left: int, right: int):
-    """Adds two numbers together."""
-    await ctx.send(left + right)
+async def add(ctx, *nbrs : int):
+    """Adds numbers together."""
+    sum = 0
+    for nbr in nbrs:
+        sum += nbr
+    await ctx.send(sum)
+
+@bot.group()
+async def roll(ctx, *dice):
+    """ Inputs random numbers depending on the command provided by the user"""
+    if len(dice) == 0:
+        await ctx.send(f'{ctx.author.nick} asked for dice, but gave none.\nIf you need help just type \"!roll help\"')
+    else:
+        await ctx.send(f'{ctx.author.nick} sent the input {dice} with the type {type(dice)}.')
+        rolling = Dice()
+        await rolling.create(ctx, dice, helpCommand='!roll help')
+
+@roll.command(name='help')
+async def _roll_help(ctx):
+    await ctx.send("""```Synopsis:
+        !roll xdx [OPTIONS]\n
+        Description:\n
+            xdx : Denotes how many dice to roll and how many sides the dice have.\n
+        The following options are available:\n
+            + - / * : Static modifier\n\n
+            k# : How many dice to keep out of the roll, keeping highest value.\n
+            r# : Reroll value.\n
+            ir# : Indefinite reroll value.\n
+            t# : Target number for a success.\n
+            f# : Target number for a failure.\n
+            ! : Any text after ! will be a comment.```""")
+
+
+@bot.group()
+async def cool(ctx):
+    """Says if a user is cool.
+    In reality this just checks if a subcommand is being invoked.
+    """
+    if ctx.invoked_subcommand is None:
+        await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
+
+@cool.command(name='bot')
+async def _bot(ctx):
+    """Is the bot cool?"""
+    await ctx.send('Yes, the bot is cool.')
 
 @bot.event
 async def on_member_join(member):

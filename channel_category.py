@@ -20,7 +20,6 @@ async def find_channel(guild_cat, channel_name):
 
     #Channels' names are always lowercase
     for channel in guild_cat.channels:
-        print(channel.name)
         if channel.name == channel_name.lower(): return channel
     return None
 
