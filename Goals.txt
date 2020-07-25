@@ -43,5 +43,11 @@ Next need to be done:
 Next:
 	Problem with channel creation CHECK
 	Token hidden CHECK
-	Anouncement premissions
+	Anouncement premissions ALMOST CHECK
+		Bots can write in it, I dont want that
+	Roll dices
+	Dice object
+	Help command Roll
+	Simple Roll
+	Options
 	Create characters
