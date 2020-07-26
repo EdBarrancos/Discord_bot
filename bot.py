@@ -84,7 +84,6 @@ async def roll(ctx, *dice):
             + - / * : Static modifier\n\n
             k# : How many dice to keep out of the roll, keeping highest value.\n
             r# : Reroll value.\n
-            ir# : Indefinite reroll value.\n
             t# : Target number for a success.\n
             f# : Target number for a failure.\n
             ! : Any text after ! will be a comment.```""")
