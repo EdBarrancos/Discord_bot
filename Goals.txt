@@ -47,7 +47,9 @@ Next:
 		Bots can write in it, I dont want that
 	Roll dices
 	Dice object
-	Help command Roll
+	Help command Roll CHECK
+	Identify number of dice, type of dice and Options CHECK
+	Optimize and make readable the identificacion
 	Simple Roll
 	Options
 	Create characters

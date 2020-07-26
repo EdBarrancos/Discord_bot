@@ -69,19 +69,14 @@ async def add(ctx, *nbrs : int):
         sum += nbr
     await ctx.send(sum)
 
-@bot.group()
+@bot.command()
 async def roll(ctx, *dice):
     """ Inputs random numbers depending on the command provided by the user"""
     if len(dice) == 0:
         await ctx.send(f'{ctx.author.nick} asked for dice, but gave none.\nIf you need help just type \"!roll help\"')
-    else:
-        await ctx.send(f'{ctx.author.nick} sent the input {dice} with the type {type(dice)}.')
-        rolling = Dice()
-        await rolling.create(ctx, dice, helpCommand='!roll help')
-
-@roll.command(name='help')
-async def _roll_help(ctx):
-    await ctx.send("""```Synopsis:
+    elif dice[0] == 'help':
+        #Help command
+         await ctx.send("""```Synopsis:
         !roll xdx [OPTIONS]\n
         Description:\n
             xdx : Denotes how many dice to roll and how many sides the dice have.\n
@@ -93,7 +88,10 @@ async def _roll_help(ctx):
             t# : Target number for a success.\n
             f# : Target number for a failure.\n
             ! : Any text after ! will be a comment.```""")
-
+    else:
+        await ctx.send(f'{ctx.author.nick} sent the input {dice} with the type {type(dice)}.')
+        rolling = Dice()
+        await rolling.create(ctx, dice, helpCommand='!roll help')
 
 @bot.group()
 async def cool(ctx):
