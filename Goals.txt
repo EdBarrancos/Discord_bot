@@ -53,3 +53,11 @@ Next:
 	Simple Roll
 	Options
 	Create characters
+
+Next Next:
+	Options flags
+	Roll separate
+	Roll separate with modifier
+	Sum or Options
+	Make Wrong messages more specific
+	Comment how to module

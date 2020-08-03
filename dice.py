@@ -13,7 +13,7 @@ class Dice:
 
         dice = _input[0]
         dice = dice.split('d')
-        print(dice)
+
         if len(dice) == 1:
             #Input not formated properly
             return await self.somethingWentWrong("Dice information not introduced properly.")
@@ -25,18 +25,82 @@ class Dice:
             for i in range(1,len(_input)):
                 self.options += _input[i]
         
-            self.optionFlags = 0
-            # 0000 -> No special options
-            # 0001 -> Keep dice out of the roll
-            # 0010 -> Reroll values
-            # 0100 -> Target number for a success
-            # 1000 -> Target number for a failure
-            await self.guild.send(f'number of dice: {self.numDice}\n Type of dice: {self.typeDice}\n Options: {self.options}.')
+            optionFlags = await self.getOptionsFlags()
+            if optionFlags == self: return self
+            # 0 -> Keep dice out of the roll
+            # 1 -> Reroll values
+            # 2 -> Target number for a success
+            # 3 -> Target number for a failure
+
+            # To add an Option:
+            # Expect a new index in the tuple
+            # Add a new index and the condicitons for it in the flag
+            # Add it to help
+            await self.guild.send(f'number of dice: {self.numDice}\n Type of dice: {self.typeDice}\n Options: {optionFlags}\n Modifiers: {self.modifier}.')
             return self
 
     async def getOptionsFlags(self):
         """ Return the active flags for this roll """
-        return 0
+        flag = list()
+        for _ in range(NumberOfOptions):
+            flag.append(EMPTYSTRING)
+
+        extractingOp = 0
+        # 0 -> No op
+        # 1 -> Found a op
+        # 2 -> Found at least a number
+        extractingMod = 0
+        # 0 -> No mod
+        # 1 -> Found a mod
+        # 2 -> Found at least a number
+        self.modifier = EMPTYSTRING
+
+        for i in self.options:
+            if extractingOp == 2:
+                #Last State
+                if isNumber(i):
+                    flag[index] += i
+                else:
+                    extractingOp = 0
+
+            elif extractingMod == 2:
+                #Last State
+                if isNumber(i):
+                    self.modifier += i
+                else:
+                    extractingMod = 0
+
+            if extractingOp == 0 and extractingMod == 0:
+                # Idle State
+                # Searching
+                if i in Operators:
+                    self.modifier += i
+                    extractingMod = 1
+                elif i in OptionsWNumber:
+                    index = OptionsWNumber.index(i)
+                    extractingOp = 1
+                elif i in Options:
+                    index = len(OptionsWNumber) + Options.index(i) - 1
+                    flag[index] = ACTIVE
+                    extractingOp = 2
+
+            elif extractingOp == 1:
+                # Transition State
+                if isNumber(i):
+                    if flag[index] == None: flag[index] = i
+                    else: flag[index] += i
+                    extractingOp = 2
+                else: return await self.somethingWentWrong("Options wrongly formated") 
+
+            elif extractingMod == 1:
+                # Transition State
+                if isNumber(i):
+                    self.modifier += i
+                    extractingMod = 2
+                else: return await self.somethingWentWrong("Options wrongly formated")
+        
+        if extractingOp == 1 or extractingMod == 1: return await self.somethingWentWrong("Options wrongly formated")
+        return flag
 
     async def getDiceInfo(self, dice):
         """ Finds the number of dice and the type. 
@@ -52,7 +116,7 @@ class Dice:
         self.typeDice = EMPTYSTRING
         counter = 0
         size_dice = len(dice[1])
-        while counter < size_dice and (dice[1][counter] >= '0' and dice[1][counter] <= '9'):
+        while counter < size_dice and (isNumber(dice[1][counter])):
             self.typeDice += dice[1][counter]
             counter += 1
         
@@ -68,3 +132,6 @@ class Dice:
         await self.guild.send(errorMessage)
         await self.guild.send(f'For more better imformation type {self.helpCommand}.')
         return self
+
+def isNumber(st):
+    return st >= "1" and st <= "9"

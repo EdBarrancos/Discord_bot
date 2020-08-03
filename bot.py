@@ -85,8 +85,8 @@ async def roll(ctx, *dice):
             k# : How many dice to keep out of the roll, keeping highest value.\n
             r# : Reroll value.\n
             t# : Target number for a success.\n
-            f# : Target number for a failure.\n
-            ! : Any text after ! will be a comment.```""")
+            f# : Target number for a failure.\n```""")
+            #New option: letter + # or letter(if option doesnt need a number)
     else:
         await ctx.send(f'{ctx.author.nick} sent the input {dice} with the type {type(dice)}.')
         rolling = Dice()

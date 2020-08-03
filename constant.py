@@ -1,5 +1,11 @@
 EMPTYSTRING = ''
-KEEPDICEOUT = 0b0001
-REROLLVALUES = 0b0010
-TARGETSUCCESS = 0b0100
-TARGETFAILURE = 0b1000
+ACTIVE = "1"
+
+Operators = "+-/*"
+
+OptionsWNumber = "krtf"
+# Needs somesort of number
+Options = "e"
+#Doesnt require number
+
+NumberOfOptions = len(OptionsWNumber) + len(Options)
