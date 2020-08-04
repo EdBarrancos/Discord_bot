@@ -55,7 +55,7 @@ Next:
 	Create characters
 
 Next Next:
-	Options flags
+	Options DONE
 	Roll separate
 	Roll separate with modifier
 	Sum or Options

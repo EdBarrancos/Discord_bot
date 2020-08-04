@@ -80,7 +80,7 @@ class Dice:
                     index = OptionsWNumber.index(i)
                     extractingOp = 1
                 elif i in Options:
-                    index = len(OptionsWNumber) + Options.index(i) - 1
+                    index = len(OptionsWNumber) + Options.index(i)
                     flag[index] = ACTIVE
                     extractingOp = 2
 
