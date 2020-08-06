@@ -1,0 +1,5 @@
+commands:
+    aliases: other ways you can invoke the command
+    name: for clarification
+    brief: small when !help
+    help: big when !help command
