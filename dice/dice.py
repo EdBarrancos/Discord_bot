@@ -15,7 +15,7 @@ class Dice:
             Add a new index and the condicitons for it in the flag
             Add it to help """
             
-        self.guild = ctx
+        self.ctx = ctx
         self.helpCommand = helpCommand
 
         dice = _input[0]
@@ -40,16 +40,41 @@ class Dice:
             # 3 -> Target number for a failure
 
             roll = await self.rolling()
-            await self.guild.send(f'{self.guild.author.mention} rolled:{roll}')
+
+            await self.ctx.send(f'{self.ctx.author.mention} rolled:`{roll}`')
+
+            if await self.crited(roll):
+                await self.crit(roll.count(self.typeDice))
+
             return self
     
+    async def crited(self, roll):
+        """ In the roll is there a maximum value? """
+        return eval(f'{self.typeDice}{self.modifier}') in roll
+
+    async def crit(self, totalNumbCrits):
+        """ Celebrative message for the Critical hit """
+        total = f'{totalNumbCrits} times!'
+        if totalNumbCrits == 1:
+            total = EMPTYSTRING
+
+        msg = await self.ctx.send(f'F*** YEAH!! {self.ctx.author.mention} JUST CRITED! {total}')
+        await msg.add_reaction(StarStruck)
+        await msg.add_reaction(MindBlowen)
+        await msg.add_reaction(Cursing)
+        await msg.add_reaction(PartyTime)
+
+        return self
+
+
     async def rolling(self):
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
 
         rolls = list()
         for _ in range(self.numDice):
-            rolls.append(random.randint(STARTROLL, self.typeDice))
+            rolls.append(eval(f'{random.randint(STARTROLL, self.typeDice)}{self.modifier}'))
+            await asyncio.sleep(0.02)
         return rolls
 
 
@@ -144,8 +169,8 @@ class Dice:
 
     async def somethingWentWrong(self, errorMessage):
         """ Sends a error message and inputs the help command """
-        await self.guild.send(errorMessage)
-        await self.guild.send(f'For more better imformation type {self.helpCommand}.')
+        await self.ctx.send(errorMessage)
+        await self.ctx.send(f'For more better imformation type {self.helpCommand}.')
         return self
 
 def isNumber(st):
