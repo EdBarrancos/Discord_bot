@@ -4,10 +4,11 @@
     Description: Manage the dice related funcitons
 """
 import asyncio
-from constant import * 
+from constant import *
+import random
 
 class Dice:
-    async def create(self, ctx, _input, helpCommand='help'):
+    async def main(self, ctx, _input, helpCommand='help'):
         self.guild = ctx
         self.helpCommand = helpCommand
 
@@ -36,11 +37,25 @@ class Dice:
             # Expect a new index in the tuple
             # Add a new index and the condicitons for it in the flag
             # Add it to help
-            await self.guild.send(f'number of dice: {self.numDice}\n Type of dice: {self.typeDice}\n Options: {optionFlags}\n Modifiers: {self.modifier}.')
+
+            roll = await self.roll()
+            await self.guild.send(f'{self.typeDice}')
+            await self.guild.send(f'{self.guild.author} rolled:{roll}')
             return self
+    
+    async def roll(self):
+        """ Returns a list with each individual rolls.
+                self.numDice elements each from 1 to self.typeDice  """
+
+        rolls = list()
+        for _ in range(self.numDice):
+            rolls.append(random.randint(STARTROLL, self.typeDice))
+        return rolls
+
 
     async def getOptionsFlags(self):
         """ Return the active flags for this roll """
+
         flag = list()
         for _ in range(NumberOfOptions):
             flag.append(EMPTYSTRING)
@@ -134,4 +149,4 @@ class Dice:
         return self
 
 def isNumber(st):
-    return st >= "1" and st <= "9"
+    return st >= "0" and st <= "9"

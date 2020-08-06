@@ -88,9 +88,8 @@ async def roll(ctx, *dice):
             f# : Target number for a failure.\n```""")
             #New option: letter + # or letter(if option doesnt need a number)
     else:
-        await ctx.send(f'{ctx.author.nick} sent the input {dice} with the type {type(dice)}.')
         rolling = Dice()
-        await rolling.create(ctx, dice, helpCommand='!roll help')
+        await rolling.main(ctx, dice, helpCommand='!roll help')
 
 @bot.group()
 async def cool(ctx):

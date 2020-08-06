@@ -56,8 +56,10 @@ Next:
 
 Next Next:
 	Options DONE
-	Roll separate
+	Roll separate DONE
 	Roll separate with modifier
 	Sum or Options
 	Make Wrong messages more specific
 	Comment how to module
+	Beautify
+	Abstraction in main function

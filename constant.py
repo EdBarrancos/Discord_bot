@@ -1,5 +1,6 @@
 EMPTYSTRING = ''
 ACTIVE = "1"
+STARTROLL = 1
 
 Operators = "+-/*"
 
