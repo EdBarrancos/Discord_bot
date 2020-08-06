@@ -57,9 +57,19 @@ Next:
 Next Next:
 	Options DONE
 	Roll separate DONE
+	Organize code and files
 	Roll separate with modifier
 	Sum or Options
 	Make Wrong messages more specific
 	Comment how to module
 	Beautify
 	Abstraction in main function
+
+STUFF TO CONSIDER:
+	setup.py?
+	license?
+	make command descriptions
+	Make command briefs
+	make random character name generator
+	Use Json as database? Does it work?
+	Change the channel and categories creation for the on ready to a server join event
