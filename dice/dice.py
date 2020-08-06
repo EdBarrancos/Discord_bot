@@ -4,11 +4,17 @@
     Description: Manage the dice related funcitons
 """
 import asyncio
-from constant import *
 import random
+
+from constant_dice import *
 
 class Dice:
     async def main(self, ctx, _input, helpCommand='help'):
+        """ To add an Option:
+            Expect a new index in the tuple
+            Add a new index and the condicitons for it in the flag
+            Add it to help """
+            
         self.guild = ctx
         self.helpCommand = helpCommand
 
@@ -33,17 +39,11 @@ class Dice:
             # 2 -> Target number for a success
             # 3 -> Target number for a failure
 
-            # To add an Option:
-            # Expect a new index in the tuple
-            # Add a new index and the condicitons for it in the flag
-            # Add it to help
-
-            roll = await self.roll()
-            await self.guild.send(f'{self.typeDice}')
-            await self.guild.send(f'{self.guild.author} rolled:{roll}')
+            roll = await self.rolling()
+            await self.guild.send(f'{self.guild.author.mention} rolled:{roll}')
             return self
     
-    async def roll(self):
+    async def rolling(self):
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
 
@@ -54,7 +54,7 @@ class Dice:
 
 
     async def getOptionsFlags(self):
-        """ Return the active flags for this roll """
+        """ Return the options for this roll and checks for modifiers """
 
         flag = list()
         for _ in range(NumberOfOptions):

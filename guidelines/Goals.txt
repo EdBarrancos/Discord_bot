@@ -73,3 +73,5 @@ STUFF TO CONSIDER:
 	make random character name generator
 	Use Json as database? Does it work?
 	Change the channel and categories creation for the on ready to a server join event
+	If they dont have permissions when join
+	Deal with channels with same name
