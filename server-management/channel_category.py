@@ -4,6 +4,8 @@
     Description: Functions needed for channel and category management
 """
 
+# Problem: Its possible to have a channel and a category with the same name
+
 async def find_category(guild,category_name):
     """ Returns the category with the name in the guild """
     if not(guild and category_name): return None 
@@ -20,7 +22,6 @@ async def find_channel(guild_cat, channel_name):
 
     #Channels' names are always lowercase
     for channel in guild_cat.channels:
-        print(channel.name)
         if channel.name == channel_name.lower(): return channel
     return None
 

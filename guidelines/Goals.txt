@@ -5,11 +5,6 @@ Each reactions will have a role attached
 Create roles if not yet created
 Also explain all the roles and functionalities
 
-<<<<<<< Updated upstream
-------------------------------
-
-=======
->>>>>>> Stashed changes
 use on dnd channel
 Way to contact me or I contact other players
     Like command which will send a message to the DM
@@ -18,21 +13,11 @@ Create characters in the discord as other users? But connected to their account
 Create instances for magic items. I can atribute them to characters and take them away
 Manage channel where I will summarize each session
 
-<<<<<<< Updated upstream
-------------------------------
-
-=======
->>>>>>> Stashed changes
 Roles
 Player and DM
 The players receive in game xp and discord xp.
 Like talking and stuff
 
-<<<<<<< Updated upstream
-------------------------------
-
-=======
->>>>>>> Stashed changes
 DnD channels folder:
 Welcome channel
 	Welcome channel create and check if it created
@@ -40,7 +25,6 @@ Welcome channel
 Channel for leveling up
 Channel for DM Anouncements
 Create and delete specific channels for each thingy
-<<<<<<< Updated upstream
 Channel for General anouncements
 
 Afk channel
@@ -55,8 +39,33 @@ Next:
 	Token hidden CHECK
 	Anouncement premissions ALMOST CHECK
 	Roll dices
-	Roll nbr of dice| size of dice + something
+	Dice object
+	Help command Roll CHECK
+	Identify number of dice, type of dice and Options CHECK
+	Optimize and make readable the identificacion
+	Simple Roll
+	Options
 	Create characters
-=======
-Channel for General anouncements
->>>>>>> Stashed changes
+
+Next Next:
+	Options DONE
+	Roll separate DONE
+	Organize code and files
+	Roll separate with modifier
+	Sum or Options
+	Make Wrong messages more specific
+	Comment how to module
+	Beautify
+	Abstraction in main function
+
+STUFF TO CONSIDER:
+	setup.py?
+	license?
+	make command descriptions
+	Make command briefs
+	make random character name generator
+	Use Json as database? Does it work?
+	Change the channel and categories creation for the on ready to a server join event
+	If they dont have permissions when join
+	Deal with channels with same name
+
