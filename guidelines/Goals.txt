@@ -5,8 +5,6 @@ Each reactions will have a role attached
 Create roles if not yet created
 Also explain all the roles and functionalities
 
-------------------------------
-
 use on dnd channel
 Way to contact me or I contact other players
     Like command which will send a message to the DM
@@ -15,14 +13,10 @@ Create characters in the discord as other users? But connected to their account
 Create instances for magic items. I can atribute them to characters and take them away
 Manage channel where I will summarize each session
 
-------------------------------
-
 Roles
 Player and DM
 The players receive in game xp and discord xp.
 Like talking and stuff
-
-------------------------------
 
 DnD channels folder:
 Welcome channel
@@ -44,7 +38,6 @@ Next:
 	Problem with channel creation CHECK
 	Token hidden CHECK
 	Anouncement premissions ALMOST CHECK
-		Bots can write in it, I dont want that
 	Roll dices
 	Dice object
 	Help command Roll CHECK
@@ -75,3 +68,4 @@ STUFF TO CONSIDER:
 	Change the channel and categories creation for the on ready to a server join event
 	If they dont have permissions when join
 	Deal with channels with same name
+
