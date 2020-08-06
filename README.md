@@ -15,10 +15,13 @@ It creates a "announcement" channel within that category
 #### Commands
 
 - !ping
+
 Pong!
 
 - !add nbrs
+
 sum(nbrs)
 
 - !roll NdX [OPTIONS]
+
 Rolls N dice of X type according to OPTIONS
