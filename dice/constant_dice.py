@@ -11,7 +11,7 @@ Operators = "+-/*"
 
 OptionsWNumber = "krtf"
 # Needs somesort of number
-Options = "e"
+Options = ""
 #Doesnt require number
 
 NumberOfOptions = len(OptionsWNumber) + len(Options)

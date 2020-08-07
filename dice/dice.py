@@ -7,6 +7,7 @@ import asyncio
 import random
 
 from constant_dice import *
+from helpfulfunc import *
 
 class Dice:
     async def main(self, ctx, _input, helpCommand='help'):
@@ -18,19 +19,20 @@ class Dice:
         self.ctx = ctx
         self.helpCommand = helpCommand
 
-        dice = _input[0]
+        dice = _input[0].lower()
         dice = dice.split('d')
 
         if len(dice) == 1:
+            dice = dice[0]
             #Input not formated properly
             return await self.somethingWentWrong("Dice information not introduced properly.")
         else:
             i = await self.getDiceInfo(dice)
             if i == self: return self
 
-            self.options = dice[1][i:]
+            self.options = dice[1][i:].lower()
             for i in range(1,len(_input)):
-                self.options += _input[i]
+                self.options += _input[i].lower()
         
             optionFlags = await self.getOptionsFlags()
             if optionFlags == self: return self
@@ -41,24 +43,28 @@ class Dice:
 
             roll = await self.rolling()
 
-            await self.ctx.send(f'{self.ctx.author.mention} rolled:`{roll}`')
+            for index, option in enumerate(optionFlags):
+                if option:
+                    if index == 0:
+                        # Keep dice out of the roll
+                        continue
 
-            if await self.crited(roll):
+            await self.ctx.send(f'{self.ctx.author.mention} rolled:`{roll}`')
+            
+            
+
+            if await crited(roll, self.typeDice, self.modifier):
                 await self.crit(roll.count(self.typeDice))
 
             return self
-    
-    async def crited(self, roll):
-        """ In the roll is there a maximum value? """
-        return eval(f'{self.typeDice}{self.modifier}') in roll
 
     async def crit(self, totalNumbCrits):
         """ Celebrative message for the Critical hit """
-        total = f'{totalNumbCrits} times!'
+        critTimesStr = f'{totalNumbCrits} times!'
         if totalNumbCrits == 1:
-            total = EMPTYSTRING
+            critTimesStr = EMPTYSTRING
 
-        msg = await self.ctx.send(f'F*** YEAH!! {self.ctx.author.mention} JUST CRITED! {total}')
+        msg = await self.ctx.send(f'F*** YEAH!! {self.ctx.author.mention} JUST CRITED! {critTimesStr}')
         await msg.add_reaction(StarStruck)
         await msg.add_reaction(MindBlowen)
         await msg.add_reaction(Cursing)
@@ -152,7 +158,9 @@ class Dice:
                 self.numDice = int(dice[0])
             except ValueError:
                 return await self.somethingWentWrong("Dice information not introduced properly.")
-        
+
+        if self.numDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
+
         self.typeDice = EMPTYSTRING
         counter = 0
         size_dice = len(dice[1])
@@ -165,6 +173,8 @@ class Dice:
         except ValueError:
             return await self.somethingWentWrong("Dice information not introduced properly.")
         
+        if self.typeDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
+
         return counter
 
     async def somethingWentWrong(self, errorMessage):
@@ -172,6 +182,3 @@ class Dice:
         await self.ctx.send(errorMessage)
         await self.ctx.send(f'For more better imformation type {self.helpCommand}.')
         return self
-
-def isNumber(st):
-    return st >= "0" and st <= "9"
