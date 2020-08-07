@@ -1,5 +1,5 @@
 """ 
-    File: constant-dice.py
+    File: constant_dice.py
     Author: Eduardo Barrancos
     Description: Store constants used on dice.py
 """

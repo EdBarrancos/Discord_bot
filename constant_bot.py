@@ -1,5 +1,5 @@
 """ 
-    File: constant-bot.py
+    File: constant_bot.py
     Author: Eduardo Barrancos
     Description: Stores the constants used in bot.py
 """
@@ -11,7 +11,12 @@ COMMANDPREFIX = '!'
 anouncChannelName = 'Announcements'
 dndCategoryName = 'DNDTIME'
 
-HELPMESSAGE = """Synopsis:
+########
+# Roll #
+########
+RollName = "roll"
+RollAliases = ("Roll", "ROLL", "rolling", "ROLLING", "Rolling")
+RollHelpMessage = """Synopsis:
         !roll xdx [OPTIONS]\n
         Description:\n
             xdx : Denotes how many dice to roll and how many sides the dice have.\n
@@ -22,3 +27,41 @@ HELPMESSAGE = """Synopsis:
             t# : Target number for a success.\n
             f# : Target number for a failure.\n"""
             # New option: letter + # or letter(if option doesnt need a number)
+
+RollBriefMessage = """ Inputs random numbers depending on the command provided by the user
+            !roll XdX [OPTIONS] """
+
+########
+# Ping #
+########
+
+PingName = "ping"
+PingAliases = ("Ping", "PING")
+PingHelpMessage = "I'll answer Pong!"
+PingBriefMessage = "Type !ping to play Pong!"
+
+#######
+# Add #
+#######
+
+AddName = "add"
+AddAliases = ("Add", "ADD", "sum", "Sum", "SUM")
+AddHelpMessage = """Input some numbers and I'll return all of them added together.\n
+                    Just remember to leave a blank space between each other"""
+AddBriefMessage = "I add numbers together, simple and easy. N N N ..." 
+
+########
+# Cool #
+########
+
+CoolName = "cool"
+CoolAliases = ("Cool", "COOL")
+CoolHelpMessage = "I'll tell you if you are cool"
+CoolBriefMessage = "Are you cool? I know I am!"
+
+###########
+##### Bot #
+###########
+
+BotName = "bot"
+BotAliases = ("you", "You")

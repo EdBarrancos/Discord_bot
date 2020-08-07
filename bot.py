@@ -47,7 +47,7 @@ async def on_ready():
 async def on_guild_join(guild):
     """ When joinning a guild create channels and categories for the rpg management """
 
-    print(f'In {guild}:')
+    print(f'Just entered {guild}.')
     dndcat = await find_category(guild, dndCategoryName)
     if not dndcat:
         dndcat = await guild.create_category(dndCategoryName)
@@ -76,13 +76,19 @@ async def on_member_join(member):
 ## Commands #########
 #####################
 
-@bot.command()
+@bot.command(name=PingName,
+            aliases=PingAliases,
+            help=PingHelpMessage,
+            brief=PingBriefMessage)
 async def ping(ctx):
     """ Ping? """
     await ctx.send('Pong!')
 
 
-@bot.command()
+@bot.command(name=AddName,
+            aliases=AddAliases,
+            help=AddHelpMessage,
+            brief=AddBriefMessage)
 async def add(ctx, *nbrs : int):
     """Adds numbers together"""
     sum = 0
@@ -91,23 +97,27 @@ async def add(ctx, *nbrs : int):
     await ctx.send(sum)
 
 
-@bot.command(help=HELPMESSAGE,
-            brief=""" Inputs random numbers depending on the command provided by the user
-            !roll XdX [OPTIONS]""")
+@bot.command(name=RollName,
+            aliases=RollAliases,
+            help=RollHelpMessage,
+            brief=RollBriefMessage)
 async def roll(ctx, *dice):
     """ Inputs random numbers depending on the command provided by the user
             !roll XdX [OPTIONS]"""
     if len(dice) == 0:
-        await ctx.send(f'{ctx.author.nick} asked for dice, but gave none.\nIf you need help just type \"!roll help\"')
+        await ctx.send(f'{ctx.author.mention} asked for dice, but gave none.\nIf you need help just type \"!roll help\"')
     elif dice[0] == 'help':
         #Help command
-         await ctx.send(HELPMESSAGE)
+         await ctx.send(RollHelpMessage)
     else:
         rolling = Dice()
         await rolling.main(ctx, dice, helpCommand='!help or !help roll')
 
 
-@bot.group()
+@bot.group(name=CoolName,
+            aliases=CoolAliases,
+            help=CoolHelpMessage,
+            brief=CoolBriefMessage)
 async def cool(ctx):
     """Says if a user is cool.
     In reality this just checks if a subcommand is being invoked.
@@ -116,7 +126,8 @@ async def cool(ctx):
         await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
 
 
-@cool.command(name='bot')
+@cool.command(name=BotName,
+                aliases=BotAliases)
 async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
