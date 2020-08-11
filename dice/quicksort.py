@@ -5,32 +5,30 @@
 """
 import  asyncio
 
-async def quicksort(vector: list, left: int, right: int) -> list:
-    """ QuickSort a list """
+async def quicksort(vector: list, left: int, right: int, comparator= lambda a,b: a < b) -> list:
+    """ QuickSort a list
+            receives the limitations and the comparator function which defaults to less(from smallest to biggest)
+            returns the list sorted"""
     if left < right:
-        p = await particion(vector, left, right)
-        vector = await quicksort(vector, left, p - 1)
-        vector = await quicksort(vector, p + 1, right)
+        p = await particion(vector, left, right, comparator)
+        vector = await quicksort(vector, left, p - 1, comparator)
+        vector = await quicksort(vector, p + 1, right, comparator)
         
     return vector
 
 
-async def particion(vector: list, left: int, right: int) -> int:
+async def particion(vector: list, left: int, right: int, comparator: bool) -> int:
+    """ Sort each partition and return the pivot of reference for next partitions """
     pivot = vector[right]
     
     i = left - 1
     
     j = left
     for j in range(left, right):
-        if await greater(vector[j], pivot): 
+        if comparator(vector[j], pivot): 
             i += 1
             vector[i], vector[j] = vector[j], vector[i]
     
-    if await greater(pivot, vector[i + 1]): vector[i + 1], vector[right] = vector[right], vector[i + 1]
+    if comparator(pivot, vector[i + 1]): vector[i + 1], vector[right] = vector[right], vector[i + 1]
     
     return i + 1
-        
-
-    
-async def greater(toTest, greater) -> bool:
-    return toTest > greater

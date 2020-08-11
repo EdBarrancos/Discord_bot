@@ -43,7 +43,7 @@ class Dice:
             # 3 -> Target number for a failure
 
             roll = await self.rolling()
-            roll = await quicksort(roll, 0, len(roll) - 1)
+            roll = await quicksort(roll, 0, len(roll) - 1, comparator=lambda a,b: a > b)
 
             for index, option in enumerate(optionFlags):
                 if option:
