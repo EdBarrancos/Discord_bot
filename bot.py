@@ -111,7 +111,7 @@ async def roll(ctx, *dice):
          await ctx.send(RollHelpMessage)
     else:
         rolling = Dice()
-        await rolling.main(ctx, dice, helpCommand='!help or !help roll')
+        await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 
 
 @bot.group(name=CoolName,

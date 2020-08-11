@@ -8,9 +8,10 @@ import random
 
 from constant_dice import *
 from helpfulfunc import *
+from quicksort import quicksort
 
 class Dice:
-    async def main(self, ctx, _input, helpCommand='help'):
+    async def roll_dice(self, ctx, _input, helpCommand='help'):
         """ To add an Option:
             Expect a new index in the tuple
             Add a new index and the condicitons for it in the flag
@@ -42,6 +43,7 @@ class Dice:
             # 3 -> Target number for a failure
 
             roll = await self.rolling()
+            roll = await quicksort(roll, 0, len(roll) - 1)
 
             for index, option in enumerate(optionFlags):
                 if option:
@@ -104,14 +106,14 @@ class Dice:
         for i in self.options:
             if extractingOp == 2:
                 #Last State
-                if isNumber(i):
+                if await isNumber(i):
                     flag[index] += i
                 else:
                     extractingOp = 0
 
             elif extractingMod == 2:
                 #Last State
-                if isNumber(i):
+                if await isNumber(i):
                     self.modifier += i
                 else:
                     extractingMod = 0
@@ -132,7 +134,7 @@ class Dice:
 
             elif extractingOp == 1:
                 # Transition State
-                if isNumber(i):
+                if await isNumber(i):
                     if flag[index] == None: flag[index] = i
                     else: flag[index] += i
                     extractingOp = 2
@@ -140,7 +142,7 @@ class Dice:
 
             elif extractingMod == 1:
                 # Transition State
-                if isNumber(i):
+                if await isNumber(i):
                     self.modifier += i
                     extractingMod = 2
                 else: return await self.somethingWentWrong("Options wrongly formated")
@@ -164,7 +166,7 @@ class Dice:
         self.typeDice = EMPTYSTRING
         counter = 0
         size_dice = len(dice[1])
-        while counter < size_dice and (isNumber(dice[1][counter])):
+        while counter < size_dice and (await isNumber(dice[1][counter])):
             self.typeDice += dice[1][counter]
             counter += 1
         
