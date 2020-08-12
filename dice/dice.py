@@ -49,6 +49,7 @@ class Dice:
                 if option:
                     if index == 0:
                         # Keep dice out of the roll
+                        roll = roll[:int(option)]
                         continue
 
             await self.ctx.send(f'{self.ctx.author.mention} rolled:`{roll}`')
@@ -56,7 +57,7 @@ class Dice:
             
 
             if await crited(roll, self.typeDice, self.modifier):
-                await self.crit(roll.count(self.typeDice))
+                await self.crit(roll.count(eval(f'{typeDice}{modifier}')))
 
             return self
 
