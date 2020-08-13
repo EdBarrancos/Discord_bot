@@ -8,13 +8,10 @@ import asyncio
 import json
 from discord.ext import commands
 
-import sys
-sys.path.append('./dice')
-sys.path.append('./server-management')
 
 from constant_bot import *
-from channel_category import find_category, find_channel
-from dice import Dice
+from server_management.channel_category import find_category, find_channel
+from dice.dice_main import Roll
 
 
 
@@ -120,7 +117,7 @@ async def roll(ctx):
 async def _rollDice(ctx, *dice):
     """ Inputs random numbers depending on the command provided by the user
             !roll dice XdX [OPTIONS] """
-    rolling = Dice()
+    rolling = Roll()
     await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 
     
@@ -130,11 +127,11 @@ async def _rollDice(ctx, *dice):
             help=CoolHelpMessage,
             brief=CoolBriefMessage)
 async def cool(ctx):
-    """Says if a user is cool.
+    """Says if a somthing is cool.
     In reality this just checks if a subcommand is being invoked.
     """
     if ctx.invoked_subcommand is None:
-        await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
+        await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
 
 
 @cool.command(name=BotName,

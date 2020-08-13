@@ -3,21 +3,22 @@
     Author: Eduardo Barrancos
     Description: Manage the dice related funcitons
 """
-import asyncio
 import random
 
-from constant_dice import *
-from helpfulfunc import *
+from dice_aux.dice import Dice
+from dice_aux.error import Error
+from constant_dice_main import *
+from dice_aux.helful_functions import *
 from quicksort import quicksort
 
-class Dice:
-    async def roll_dice(self, ctx, _input, helpCommand='help'):
+
+class Roll:
+    async def roll_dice(self, context, _input, helpCommand='help'):
         """ To add an Option:
             Expect a new index in the tuple
             Add a new index and the condicitons for it in the flag
-            Add it to help """
-            
-        self.ctx = ctx
+            Add it to help """          
+        self.context = context
         self.helpCommand = helpCommand
 
         dice = _input[0].lower()
@@ -52,14 +53,52 @@ class Dice:
                         roll = roll[:int(option)]
                         continue
 
-            await self.ctx.send(f'{self.ctx.author.mention} rolled:`{roll}`')
+            await self.context.send(f'{self.context.author.mention} rolled:`{roll}`')
             
             
 
             if await crited(roll, self.typeDice, self.modifier):
-                await self.crit(roll.count(eval(f'{typeDice}{modifier}')))
+                await self.crit(roll.count(eval(f'{self.typeDice}{self.modifier}')))
 
             return self
+    
+    async def processInputDice(self, _input):
+        #get the num dice
+        dice = self.getDiceInfo(self, _input)
+        self.numDice, self.typeDice = dice["numDice"], dice["typeDice"], dice["InputStoppingPoint"]
+        #get the type dice
+        
+        #get the options
+        
+    async def getDiceInfo(self, dice):
+        """ Finds the number of dice and the type. 
+            Returns the position of the options"""
+        if dice[0] == EMPTYSTRING:
+            self.numDice = 1
+        else:
+            try:
+                self.numDice = int(dice[0])
+            except ValueError:
+                return await self.somethingWentWrong("Dice information not introduced properly.")
+
+        if self.numDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
+
+        self.typeDice = EMPTYSTRING
+        counter = 0
+        size_dice = len(dice[1])
+        while counter < size_dice and (await isNumber(dice[1][counter])):
+            self.typeDice += dice[1][counter]
+            counter += 1
+        
+        try:
+            self.typeDice = int(self.typeDice)
+        except ValueError:
+            return await self.somethingWentWrong("Dice information not introduced properly.")
+        
+        if self.typeDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
+
+        return counter
+    
 
     async def crit(self, totalNumbCrits):
         """ Celebrative message for the Critical hit """
@@ -67,7 +106,7 @@ class Dice:
         if totalNumbCrits == 1:
             critTimesStr = EMPTYSTRING
 
-        msg = await self.ctx.send(f'F*** YEAH!! {self.ctx.author.mention} JUST CRITED! {critTimesStr}')
+        msg = await self.context.send(f'F*** YEAH!! {self.context.author.mention} JUST CRITED! {critTimesStr}')
         await msg.add_reaction(StarStruck)
         await msg.add_reaction(MindBlowen)
         await msg.add_reaction(Cursing)
@@ -139,49 +178,20 @@ class Dice:
                     if flag[index] == None: flag[index] = i
                     else: flag[index] += i
                     extractingOp = 2
-                else: return await self.somethingWentWrong("Options wrongly formated") 
+                else: return await somethingWentWrong("Options wrongly formated") 
 
             elif extractingMod == 1:
                 # Transition State
                 if await isNumber(i):
                     self.modifier += i
                     extractingMod = 2
-                else: return await self.somethingWentWrong("Options wrongly formated")
+                else: return await somethingWentWrong("Options wrongly formated")
         
         if extractingOp == 1 or extractingMod == 1: return await self.somethingWentWrong("Options wrongly formated")
         return flag
+    
+    
 
-    async def getDiceInfo(self, dice):
-        """ Finds the number of dice and the type. 
-            Returns the position of the options"""
-        if dice[0] == EMPTYSTRING:
-            self.numDice = 1
-        else:
-            try:
-                self.numDice = int(dice[0])
-            except ValueError:
-                return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        if self.numDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        self.typeDice = EMPTYSTRING
-        counter = 0
-        size_dice = len(dice[1])
-        while counter < size_dice and (await isNumber(dice[1][counter])):
-            self.typeDice += dice[1][counter]
-            counter += 1
-        
-        try:
-            self.typeDice = int(self.typeDice)
-        except ValueError:
-            return await self.somethingWentWrong("Dice information not introduced properly.")
-        
-        if self.typeDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        return counter
-
-    async def somethingWentWrong(self, errorMessage):
-        """ Sends a error message and inputs the help command """
-        await self.ctx.send(errorMessage)
-        await self.ctx.send(f'For more better imformation type {self.helpCommand}.')
-        return self
+async def crited(listOfRolls: list, typeDice: str, modifier: str) -> bool:
+        """ In list_of_roll is there a maximum value? """
+        return eval(f'{typeDice}{modifier}') in listOfRolls  

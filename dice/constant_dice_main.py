@@ -1,11 +1,12 @@
 """ 
-    File: constant_dice.py
+    File: constant_dice_main.py
     Author: Eduardo Barrancos
-    Description: Store constants used on dice.py
+    Description: Store constants used on dice_main.py
 """
 EMPTYSTRING = ''
 ACTIVE = "1"
 STARTROLL = 1
+DiceKeyLetter= 'd'
 
 Operators = "+-/*"
 

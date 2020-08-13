@@ -64,7 +64,7 @@ AddBriefMessage = "I add numbers together, simple and easy. N N N ..."
 
 CoolName = "cool"
 CoolAliases = ("cool", "Cool", "COOL")
-CoolHelpMessage = "I'll tell you if you are cool"
+CoolHelpMessage = "I'll tell you if something is cool"
 CoolBriefMessage = "Are you cool? I know I am!"
 
 ###########
