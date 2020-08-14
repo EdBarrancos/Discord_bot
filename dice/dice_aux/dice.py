@@ -9,23 +9,28 @@ from options.options import *
 
 class Dice():
     async def processInputDice(self _input):
-        processedInput = await processRawInput(self, _input)
+        processedInput = await self.processRawInput( _input)
         if len(processedInput["dice"]) == 1:
             # At least two components, number of Dice and type of Dice
             return await Error().defineError("Dice information not introduced properly.")
         
-        dice = self.getDiceInfo(processedInput["dice"])
-        if isinstance(dice, Error):
-            error = dice 
-            return error
+        dice = self.processDiceInfo(processedInput["dice"])
+        if isinstance(dice, Error): return dice
         
         self.numDice, self.typeDice = dice["numDice"], dice["typeDice"]
         # basic dice information defined
         
+        options = self.processDiceOptions(processedInput["options"])
+        if isinstance(options, Error): return options
+        
+        self.modifiers, self.optionsFlags = options["modifiers"], options["optionsFlags"]
+        
+        return self
         
         
-    async def getDiceOptions(self, optionsInput):
-        optionsFlag = await Options().initOptionFlags()
+        
+    async def processDiceOptions(self, optionsInput):
+        optionsFlags = await Options().initOptionFlags()
         modifiers = await Modifier().initModifier()
         
         state = await inputOptionsState().initOptionsState()
@@ -47,11 +52,9 @@ class Dice():
                     await modifiers.addCharacter(char)
                     state = inputOptionsState().foundModifier
                     
-                elif char in AllOptions:
-                    optionIndex = optionsFlags.getOptionsIndex(char)
+                elif char in AllOptions: optionIndex = optionsFlags.getOptionsIndex(char)
                 
-                if char in OptionsOutNumber:
-                    state = inputOptionsState().foundOption
+                if char in OptionsOutNumber: state = inputOptionsState().foundOption
                     
                 elif char in OptionsWithNumber:
                     state = inputOptionsState().receivingAndStoringOptions
@@ -83,15 +86,15 @@ class Dice():
         return processedInput
         
         
-    async def getDiceInfo(self, diceInput):
+    async def processDiceInfo(self, diceInput):
         diceInfo = dict()
     
-        diceInfo["numDice"] = self.getNumberOfDice(diceInput[0])
+        diceInfo["numDice"] = self.processNumberOfDice(diceInput[0])
         if isinstance(diceInfo["numDice"], Error):
             error = diceInfo["numDice"]
             return error
 
-        diceInfo["typeDice"] = self.getTypeOfDice(diceInput[1])
+        diceInfo["typeDice"] = self.processTypeOfDice(diceInput[1])
         if isinstance(diceInfo["typeDice"], Error):
             error = diceInfo["typeDice"]
             return error
@@ -99,7 +102,7 @@ class Dice():
         return diceInfo
     
     
-    async def getTypeOfDice(self, typeDiceInput):
+    async def processTypeOfDice(self, typeDiceInput):
         typeDice = typeDiceInput
         
         try:
@@ -110,7 +113,7 @@ class Dice():
         if not self.validDiceInfo(typeDice): return await Error().defineError("Dice information not introduced properly.")
     
     
-    async def getNumberOfDice(self, numDiceInput):
+    async def processNumberOfDice(self, numDiceInput):
         if numDiceInput == EMPTYSTRING:
             numDice = 1
         else:
@@ -123,6 +126,3 @@ class Dice():
         
     async validDiceInfo(self, info):
         return info > 0
-    
-
-    

@@ -62,43 +62,6 @@ class Roll:
 
             return self
     
-    async def processInputDice(self, _input):
-        #get the num dice
-        dice = self.getDiceInfo(self, _input)
-        self.numDice, self.typeDice = dice["numDice"], dice["typeDice"], dice["InputStoppingPoint"]
-        #get the type dice
-        
-        #get the options
-        
-    async def getDiceInfo(self, dice):
-        """ Finds the number of dice and the type. 
-            Returns the position of the options"""
-        if dice[0] == EMPTYSTRING:
-            self.numDice = 1
-        else:
-            try:
-                self.numDice = int(dice[0])
-            except ValueError:
-                return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        if self.numDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        self.typeDice = EMPTYSTRING
-        counter = 0
-        size_dice = len(dice[1])
-        while counter < size_dice and (await isNumber(dice[1][counter])):
-            self.typeDice += dice[1][counter]
-            counter += 1
-        
-        try:
-            self.typeDice = int(self.typeDice)
-        except ValueError:
-            return await self.somethingWentWrong("Dice information not introduced properly.")
-        
-        if self.typeDice <= 0: return await self.somethingWentWrong("Dice information not introduced properly.")
-
-        return counter
-    
 
     async def crit(self, totalNumbCrits):
         """ Celebrative message for the Critical hit """
@@ -124,71 +87,6 @@ class Roll:
             rolls.append(eval(f'{random.randint(STARTROLL, self.typeDice)}{self.modifier}'))
             await asyncio.sleep(0.02)
         return rolls
-
-
-    async def getOptionsFlags(self):
-        """ Return the options for this roll and checks for modifiers """
-
-        flag = list()
-        for _ in range(NumberOfOptions):
-            flag.append(EMPTYSTRING)
-
-        extractingOp = 0
-        # 0 -> No op
-        # 1 -> Found a op
-        # 2 -> Found at least a number
-        extractingMod = 0
-        # 0 -> No mod
-        # 1 -> Found a mod
-        # 2 -> Found at least a number
-        self.modifier = EMPTYSTRING
-
-        for i in self.options:
-            if extractingOp == 2:
-                #Last State
-                if await isNumber(i):
-                    flag[index] += i
-                else:
-                    extractingOp = 0
-
-            elif extractingMod == 2:
-                #Last State
-                if await isNumber(i):
-                    self.modifier += i
-                else:
-                    extractingMod = 0
-
-            if extractingOp == 0 and extractingMod == 0:
-                # Idle State
-                # Searching
-                if i in Operators:
-                    self.modifier += i
-                    extractingMod = 1
-                elif i in OptionsWNumber:
-                    index = OptionsWNumber.index(i)
-                    extractingOp = 1
-                elif i in Options:
-                    index = len(OptionsWNumber) + Options.index(i)
-                    flag[index] = ACTIVE
-                    extractingOp = 2
-
-            elif extractingOp == 1:
-                # Transition State
-                if await isNumber(i):
-                    if flag[index] == None: flag[index] = i
-                    else: flag[index] += i
-                    extractingOp = 2
-                else: return await somethingWentWrong("Options wrongly formated") 
-
-            elif extractingMod == 1:
-                # Transition State
-                if await isNumber(i):
-                    self.modifier += i
-                    extractingMod = 2
-                else: return await somethingWentWrong("Options wrongly formated")
-        
-        if extractingOp == 1 or extractingMod == 1: return await self.somethingWentWrong("Options wrongly formated")
-        return flag
     
     
 
