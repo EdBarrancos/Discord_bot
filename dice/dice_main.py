@@ -21,47 +21,41 @@ class Roll:
         self.context = context
         self.helpCommand = helpCommand
 
-        dice = _input[0].lower()
-        dice = dice.split('d')
+        dice = Dice()
+        dice.processInputDice(_input)
+        if isinstance(dice, Error): return dice.sendErrorToUser(self.context, self.helpCommand)
 
-        if len(dice) == 1:
-            dice = dice[0]
-            #Input not formated properly
-            return await self.somethingWentWrong("Dice information not introduced properly.")
-        else:
-            i = await self.getDiceInfo(dice)
-            if i == self: return self
+        self.roll = await self.rolling(dice)
+        self.roll = await quicksort(self.roll, 0, len(roll) - 1, comparator=lambda a,b: a > b)
 
-            self.options = dice[1][i:].lower()
-            for i in range(1,len(_input)):
-                self.options += _input[i].lower()
+        finalStatement = await self.processOptions(dice)
+
+        await self.context.send(f'{self.context.author.mention} rolled:`{roll}`. Which means:`{finalStatement}`')
         
-            optionFlags = await self.getOptionsFlags()
-            if optionFlags == self: return self
-            # 0 -> Keep dice out of the roll
-            # 1 -> Reroll values
-            # 2 -> Target number for a success
-            # 3 -> Target number for a failure
+        
 
-            roll = await self.rolling()
-            roll = await quicksort(roll, 0, len(roll) - 1, comparator=lambda a,b: a > b)
+        if await crited(roll, self.typeDice, self.modifier):
+            await self.crit(roll.count(eval(f'{self.typeDice}{self.modifier}')))
 
-            for index, option in enumerate(optionFlags):
-                if option:
-                    if index == 0:
-                        # Keep dice out of the roll
-                        roll = roll[:int(option)]
-                        continue
-
-            await self.context.send(f'{self.context.author.mention} rolled:`{roll}`')
-            
-            
-
-            if await crited(roll, self.typeDice, self.modifier):
-                await self.crit(roll.count(eval(f'{self.typeDice}{self.modifier}')))
-
-            return self
+        return self
     
+    async def processOptions(self, dice):
+        # 0 -> Keep dice out of the roll
+        # 1 -> Reroll values
+        # 2 -> Target number for a success
+        # 3 -> Target number for a failure
+        final = await calculateFinal(self.roll)
+        for optionIndex, optionNumber in enumerate(dice.optionsFlags):
+            if optionNumber is not None: 
+                if optionIndex is 0:
+                    self.roll = self.roll[:int(optionNumber)] # Make a Function for this
+                    final = await self.calculateFinal(self.roll)
+                #Fill out the rest
+                
+        return final
+    
+    async def calculateFinal(self, roll):
+        return sum(roll)
 
     async def crit(self, totalNumbCrits):
         """ Celebrative message for the Critical hit """
@@ -78,13 +72,13 @@ class Roll:
         return self
 
 
-    async def rolling(self):
+    async def rolling(self, dice):
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
 
         rolls = list()
-        for _ in range(self.numDice):
-            rolls.append(eval(f'{random.randint(STARTROLL, self.typeDice)}{self.modifier}'))
+        for _ in range(numDice):
+            rolls.append(dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice))
             await asyncio.sleep(0.02)
         return rolls
     

@@ -7,4 +7,5 @@ class Error():
         await context.send(f"{context.author.mention}\n"
                            "{self.errorMessage}\n"
                            "For more information type {helpCommand}")
+        return self
 

@@ -1,3 +1,4 @@
+import asyncio
 import sys
 sys.path.append('../')
 
@@ -8,7 +9,13 @@ from options.options import *
 
 
 class Dice():
-    async def processInputDice(self _input):
+    async def getCeilingNumber(self):
+        return eval(f'{self.typeDice}{self.modifiers}')
+    
+    async def getModifiedNumber(self, number):
+        return eval(f'{number}{self.modifiers}')
+    
+    async def processInputDice(self, _input):
         processedInput = await self.processRawInput( _input)
         if len(processedInput["dice"]) == 1:
             # At least two components, number of Dice and type of Dice
@@ -70,6 +77,8 @@ class Dice():
                     optionsFlags.setOption(optionIndex, char)
                     state = inputOptionsState().receivingAndStoringOptions
                 else: return await Error().defineError("Options wrongly formated")
+                
+            await asyncio.sleep(0.02)
                 
         if state is inputOptionsState().foundModifier or state is inputOptionsState().foundOption:
             return await Error().defineError("Options wrongly formated")
