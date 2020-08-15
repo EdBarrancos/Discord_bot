@@ -46,55 +46,56 @@ class Dice():
         
         print(optionsInput)
         
-        for char in optionsInput:
-            
-            print(char)
-            
-            if state is inputOptionsState.receivingAndStoringOptions:
-                if await isNumber(char): await optionsFlags.addCharacter(optionIndex, char)
-                    # State stays the same
-                else: state = inputOptionsState.searching
-            
-            elif state is inputOptionsState.receivindAndStoringModifier:
+        for option in optionsInput:
+            for char in option:
                 
-                print("receiving and storing mod")
+                print(char)
                 
-                if await isNumber(char): await modifiers.addCharacter(char)
-                    # State stays the same
-                else: state = inputOptionsState.searching
+                if state is inputOptionsState.receivingAndStoringOptions:
+                    if await isNumber(char): await optionsFlags.addCharacter(optionIndex, char)
+                        # State stays the same
+                    else: state = inputOptionsState.searching
+                
+                elif state is inputOptionsState.receivindAndStoringModifier:
                     
+                    print("receiving and storing mod")
                     
-            if state is inputOptionsState.searching:
-                
-                print("searching")
-                
-                if char in Operators:
-                    await modifiers.addCharacter(char)
-                    state = inputOptionsState.foundModifier
+                    if await isNumber(char): await modifiers.addCharacter(char)
+                        # State stays the same
+                    else: state = inputOptionsState.searching
+                        
+                        
+                if state is inputOptionsState.searching:
                     
-                elif char in AllOptions: optionIndex = await optionsFlags.getOptionsIndex(char)
-                
-                if char in OptionsOutNumber: state = inputOptionsState.foundOption
+                    print("searching")
                     
-                elif char in OptionsWithNumber:
-                    state = inputOptionsState.receivingAndStoringOptions
-            
-            elif state is inputOptionsState.foundModifier:
+                    if char in Operators:
+                        await modifiers.addCharacter(char)
+                        state = inputOptionsState.foundModifier
+                        
+                    elif char in AllOptions: optionIndex = await optionsFlags.getOptionsIndex(char)
+                    
+                    if char in OptionsOutNumber: state = inputOptionsState.foundOption
+                        
+                    elif char in OptionsWithNumber:
+                        state = inputOptionsState.receivingAndStoringOptions
                 
-                print("found mod")
-                
-                if await isNumber(char):
-                    await modifiers.addCharacter(char)
-                    state = inputOptionsState.receivindAndStoringModifier
-                else: return await Error().defineError("Options wrongly formated")
-                
-            elif state is inputOptionsState.foundOption:
-                if await isNumber(char):
-                    await optionsFlags.setOption(optionIndex, char)
-                    state = inputOptionsState.receivingAndStoringOptions
-                else: return await Error().defineError("Options wrongly formated")
-                
-            await asyncio.sleep(0.02)
+                elif state is inputOptionsState.foundModifier:
+                    
+                    print("found mod")
+                    
+                    if await isNumber(char):
+                        await modifiers.addCharacter(char)
+                        state = inputOptionsState.receivindAndStoringModifier
+                    else: return await Error().defineError("Options wrongly formated")
+                    
+                elif state is inputOptionsState.foundOption:
+                    if await isNumber(char):
+                        await optionsFlags.setOption(optionIndex, char)
+                        state = inputOptionsState.receivingAndStoringOptions
+                    else: return await Error().defineError("Options wrongly formated")
+                    
+                await asyncio.sleep(0.02)
         
         print("Getting mods")
         print(modifiers.value)
