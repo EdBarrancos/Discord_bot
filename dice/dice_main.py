@@ -5,11 +5,11 @@
 """
 import random
 
-from dice_aux.dice import Dice
-from dice_aux.error import Error
-from constant_dice_main import *
-from dice_aux.helful_functions import *
-from quicksort import quicksort
+from .dice_aux.dice import Dice
+from .dice_aux.error import Error
+from .constant_dice_main import *
+from .dice_aux.helful_functions import *
+from .quicksort import quicksort
 
 
 class Roll:
@@ -22,20 +22,20 @@ class Roll:
         self.helpCommand = helpCommand
 
         dice = Dice()
-        dice.processInputDice(_input)
+        await dice.processInputDice(_input)
         if isinstance(dice, Error): return dice.sendErrorToUser(self.context, self.helpCommand)
 
         self.roll = await self.rolling(dice)
-        self.roll = await quicksort(self.roll, 0, len(roll) - 1, comparator=lambda a,b: a > b)
+        self.roll = await quicksort(self.roll, 0, len(self.roll) - 1, comparator=lambda a,b: a > b)
 
         finalStatement = await self.processOptions(dice)
 
-        await self.context.send(f'{self.context.author.mention} rolled:`{roll}`. Which means:`{finalStatement}`')
+        await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')
         
         
 
-        if await crited(roll, self.typeDice, self.modifier):
-            await self.crit(roll.count(eval(f'{self.typeDice}{self.modifier}')))
+        if await crited(self.roll, dice.typeDice, dice.modifier):
+            await self.crit(self.roll.count(eval(f'{dice.typeDice}{dice.modifier}')))
 
         return self
     
@@ -47,7 +47,7 @@ class Roll:
         final = await calculateFinal(self.roll)
         for optionIndex, optionNumber in enumerate(dice.optionsFlags):
             if optionNumber is not None: 
-                if optionIndex is 0:
+                if optionIndex == 0:
                     self.roll = self.roll[:int(optionNumber)] # Make a Function for this
                     final = await self.calculateFinal(self.roll)
                 #Fill out the rest
@@ -77,8 +77,10 @@ class Roll:
                 self.numDice elements each from 1 to self.typeDice  """
 
         rolls = list()
-        for _ in range(numDice):
-            rolls.append(dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice))
+        print(dice)
+        print(dice.typeDice)
+        for _ in range(dice.numDice):
+            rolls.append(dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice)))
             await asyncio.sleep(0.02)
         return rolls
     

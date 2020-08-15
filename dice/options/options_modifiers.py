@@ -8,7 +8,7 @@ class inputOptionsState(Enum):
     receivingAndStoringOptions = 4
     
     async def initOptionsState(self):
-        return inputOptionsState().searching
+        return searching
 
 
 class Options():
@@ -35,14 +35,14 @@ class Options():
         return self
     
 
-    class Modifier():
-        async def initModifier(self):
-            self.value = EMPTYSTRING
-            return self
-        
-        async def addCharacter(self, char):
-            self.value += char
-            return self
+class Modifier():
+    async def initModifier(self):
+        self.value = EMPTYSTRING
+        return self
+    
+    async def addCharacter(self, char):
+        self.value += char
+        return self
 
 ACTIVE = "1"
 EMPTYSTRING = ''

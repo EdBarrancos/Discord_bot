@@ -8,7 +8,6 @@ import asyncio
 import json
 from discord.ext import commands
 
-
 from constant_bot import *
 from server_management.channel_category import find_category, find_channel
 from dice.dice_main import Roll
@@ -117,6 +116,7 @@ async def roll(ctx):
 async def _rollDice(ctx, *dice):
     """ Inputs random numbers depending on the command provided by the user
             !roll dice XdX [OPTIONS] """
+    print(dice)
     rolling = Roll()
     await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 

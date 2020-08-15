@@ -15,7 +15,7 @@ dndCategoryName = "DNDTIME"
 # Roll #
 ########
 RollName = "roll"
-RollAliases = ("roll", "Roll", "ROLL", "rolling", "ROLLING", "Rolling")
+RollAliases = ( "Roll", "ROLL", "rolling", "ROLLING", "Rolling")
 RollHelpMessage = """Main command\n
                     Subcommands:
                         !roll dice xdx [OPTIONS]"""
@@ -25,7 +25,7 @@ RollBriefMessage = """ Inputs random numbers depending on the command provided b
             !roll XdX [OPTIONS] """
             
 RollDiceSubcommandName = "dice"
-RollDiceSubcommandAliases = ("dice", "Dice", "DICE")
+RollDiceSubcommandAliases = ("Dice", "DICE")
 RollDiceSubcommandHelp = """ dice Subcommand
                             Synopsis:
                             !roll dice xdx [OPTIONS]\n
@@ -44,7 +44,7 @@ RollDiceSubcommandHelp = """ dice Subcommand
 ########
 
 PingName = "ping"
-PingAliases = ("ping", "Ping", "PING")
+PingAliases = ( "Ping", "PING")
 PingHelpMessage = "I'll answer Pong!"
 PingBriefMessage = "Type !ping to play Pong!"
 
@@ -53,7 +53,7 @@ PingBriefMessage = "Type !ping to play Pong!"
 #######
 
 AddName = "add"
-AddAliases = ("add", "Add", "ADD", "sum", "Sum", "SUM")
+AddAliases = ("Add", "ADD", "sum", "Sum", "SUM")
 AddHelpMessage = """Input some numbers and I'll return all of them added together.\n
                     Just remember to leave a blank space between each other"""
 AddBriefMessage = "I add numbers together, simple and easy. N N N ..." 
@@ -63,7 +63,7 @@ AddBriefMessage = "I add numbers together, simple and easy. N N N ..."
 ########
 
 CoolName = "cool"
-CoolAliases = ("cool", "Cool", "COOL")
+CoolAliases = ( "Cool", "COOL")
 CoolHelpMessage = "I'll tell you if something is cool"
 CoolBriefMessage = "Are you cool? I know I am!"
 
