@@ -116,7 +116,6 @@ async def roll(ctx):
 async def _rollDice(ctx, *dice):
     """ Inputs random numbers depending on the command provided by the user
             !roll dice XdX [OPTIONS] """
-    print(dice)
     rolling = Roll()
     await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 

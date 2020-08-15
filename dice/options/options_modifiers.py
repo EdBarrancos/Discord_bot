@@ -6,9 +6,6 @@ class inputOptionsState(Enum):
     foundOption = 2
     receivindAndStoringModifier = 3
     receivingAndStoringOptions = 4
-    
-    async def initOptionsState(self):
-        return searching
 
 
 class Options():
@@ -26,7 +23,7 @@ class Options():
     async def getOptionsIndex(self, char):
         index = AllOptions.index(char)
         if char in OptionsOutNumber:
-            await self.optionsFlags.setOption(index, ACTIVE)
+            await self.setOption(index, ACTIVE)
         
         return index
     

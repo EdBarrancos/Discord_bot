@@ -4,6 +4,7 @@
     Description: Manage the dice related funcitons
 """
 import random
+import asyncio
 
 from .dice_aux.dice import Dice
 from .dice_aux.error import Error
@@ -30,21 +31,21 @@ class Roll:
 
         finalStatement = await self.processOptions(dice)
 
-        await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')
-        
-        
+        await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')      
 
-        if await crited(self.roll, dice.typeDice, dice.modifier):
-            await self.crit(self.roll.count(eval(f'{dice.typeDice}{dice.modifier}')))
+        if await crited(self.roll, dice.typeDice, dice.modifiers):
+            await self.crit(self.roll.count(eval(f'{dice.typeDice}{dice.modifiers}')))
 
         return self
     
     async def processOptions(self, dice):
+        
         # 0 -> Keep dice out of the roll
         # 1 -> Reroll values
         # 2 -> Target number for a success
         # 3 -> Target number for a failure
-        final = await calculateFinal(self.roll)
+        final = await self.calculateFinal(self.roll)
+        
         for optionIndex, optionNumber in enumerate(dice.optionsFlags):
             if optionNumber is not None: 
                 if optionIndex == 0:
@@ -76,12 +77,22 @@ class Roll:
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
 
+        print("rolling")
+        print(dice.numDice)
+        
         rolls = list()
-        print(dice)
-        print(dice.typeDice)
         for _ in range(dice.numDice):
-            rolls.append(dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice)))
-            await asyncio.sleep(0.02)
+            
+            print("here for loop")
+            
+            toAddNumber = await dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice))
+            
+            print(toAddNumber)
+            
+            rolls.append(toAddNumber)
+            
+        print(rolls)
+        
         return rolls
     
     

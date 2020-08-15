@@ -14,7 +14,11 @@ class Dice():
         return eval(f'{number}{self.modifiers}')
     
     async def processInputDice(self, _input):
+        
+        print("processInput")
+        
         processedInput = await self.processRawInput( _input)
+        
         if len(processedInput["dice"]) == 1:
             # At least two components, number of Dice and type of Dice
             return await Error().defineError("Dice information not introduced properly.")
@@ -38,50 +42,67 @@ class Dice():
         optionsFlags = await Options().initOptionFlags()
         modifiers = await Modifier().initModifier()
         
-        state = inputOptionsState()
-        state = await state.initOptionsState()
+        state = inputOptionsState.searching
+        
+        print(optionsInput)
         
         for char in optionsInput:
-            if state is inputOptionsState().receivingAndStoringOptions:
+            
+            print(char)
+            
+            if state is inputOptionsState.receivingAndStoringOptions:
                 if await isNumber(char): await optionsFlags.addCharacter(optionIndex, char)
                     # State stays the same
-                else: state = inputOptionsState().searching
+                else: state = inputOptionsState.searching
             
-            elif state is inputOptionsState().receivindAndStoringModifier:
+            elif state is inputOptionsState.receivindAndStoringModifier:
+                
+                print("receiving and storing mod")
+                
                 if await isNumber(char): await modifiers.addCharacter(char)
                     # State stays the same
-                else: state = inputOptionsState().searching
+                else: state = inputOptionsState.searching
                     
                     
-            if state is inputOptionsState().searching:
+            if state is inputOptionsState.searching:
+                
+                print("searching")
+                
                 if char in Operators:
                     await modifiers.addCharacter(char)
-                    state = inputOptionsState().foundModifier
+                    state = inputOptionsState.foundModifier
                     
                 elif char in AllOptions: optionIndex = await optionsFlags.getOptionsIndex(char)
                 
-                if char in OptionsOutNumber: state = inputOptionsState().foundOption
+                if char in OptionsOutNumber: state = inputOptionsState.foundOption
                     
                 elif char in OptionsWithNumber:
-                    state = inputOptionsState().receivingAndStoringOptions
+                    state = inputOptionsState.receivingAndStoringOptions
             
-            elif state is inputOptionsState().foundModifier:
+            elif state is inputOptionsState.foundModifier:
+                
+                print("found mod")
+                
                 if await isNumber(char):
                     await modifiers.addCharacter(char)
-                    state = inputOptionsState().receivindAndStoringModifier
+                    state = inputOptionsState.receivindAndStoringModifier
                 else: return await Error().defineError("Options wrongly formated")
                 
-            elif state is inputOptionsState().foundOption:
+            elif state is inputOptionsState.foundOption:
                 if await isNumber(char):
                     await optionsFlags.setOption(optionIndex, char)
-                    state = inputOptionsState().receivingAndStoringOptions
+                    state = inputOptionsState.receivingAndStoringOptions
                 else: return await Error().defineError("Options wrongly formated")
                 
             await asyncio.sleep(0.02)
-                
-        if state is inputOptionsState().foundModifier or state is inputOptionsState().foundOption:
+        
+        print("Getting mods")
+        print(modifiers.value)
+        print(optionsFlags.optionsFlags)
+        
+        if state is inputOptionsState.foundModifier or state is inputOptionsState.foundOption:
             return await Error().defineError("Options wrongly formated")
-        else: return {"modifiers": modifiers, "optionsFlags": optionsFlags}
+        else: return {"modifiers": modifiers.value, "optionsFlags": optionsFlags.optionsFlags}
     
     
     async def processRawInput(self, _input):
@@ -115,17 +136,19 @@ class Dice():
             return await Error().defineError("Dice information not introduced properly.")
         
         if not await self.validDiceInfo(typeDice): return await Error().defineError("Dice information not introduced properly.")
+        return typeDice
     
     
     async def processNumberOfDice(self, numDiceInput):
         if numDiceInput == EMPTYSTRING: numDice = 1
         else:
             try:
-                numDiceInput = int(numDiceInput)
+                numDice = int(numDiceInput)
             except ValueError:
                 return await Error().defineError("Dice information not introduced properly.")
 
-        if not await self.validDiceInfo(numDiceInput): return await Error().defineError("Dice information not introduced properly.")
+        if not await self.validDiceInfo(numDice): return await Error().defineError("Dice information not introduced properly.")
+        return numDice
         
     async def validDiceInfo(self, info):
         return info > 0
