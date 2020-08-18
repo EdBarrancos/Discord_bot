@@ -4,6 +4,12 @@
     Description: QuickSort functions
 """
 import  asyncio
+from enum import Enum
+
+class sortingDirection(Enum):
+    biggestToLowest = 0
+    lowestToBiggest = 1
+
 
 async def quicksort(vector: list, left: int, right: int, comparator= lambda a,b: a < b) -> list:
     """ QuickSort a list
@@ -32,3 +38,12 @@ async def particion(vector: list, left: int, right: int, comparator: bool) -> in
     if comparator(pivot, vector[i + 1]): vector[i + 1], vector[right] = vector[right], vector[i + 1]
     
     return i + 1
+
+async def sort(vector, keyWord, first=0, last=None):
+    if last == None:
+        last = len(vector) - 1
+    
+    if keyWord == sortingDirection().biggestToLowest:
+        return await quicksort(vector, first, last, comparator=lambda a,b: a > b)
+    elif keyWord == sortingDirection().lowestToBiggest:
+        return await quicksort(vector, first, last)

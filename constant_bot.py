@@ -18,26 +18,22 @@ RollName = "roll"
 RollAliases = ( "Roll", "ROLL", "rolling", "ROLLING", "Rolling")
 RollHelpMessage = """Main command\n
                     Subcommands:
-                        !roll dice xdx [OPTIONS]"""
+                        !roll xdx [OPTIONS]
+                        Synopsis:
+                                !roll dice xdx [OPTIONS]\n
+                                Description:\n
+                                    xdx : Denotes how many dice to roll and how many sides the dice have.\n
+                                The following options are available:\n
+                                    + - / * : Static modifier\n\n
+                                    k# : How many dice to keep out of the roll, keeping highest value.\n
+                                    SOON
+                                    r# : Reroll value.\n
+                                    t# : Target number for a success.\n
+                                    f# : Target number for a failure.\n"""
             
 
 RollBriefMessage = """ Inputs random numbers depending on the command provided by the user
             !roll XdX [OPTIONS] """
-            
-RollDiceSubcommandName = "dice"
-RollDiceSubcommandAliases = ("Dice", "DICE")
-RollDiceSubcommandHelp = """ dice Subcommand
-                            Synopsis:
-                            !roll dice xdx [OPTIONS]\n
-                            Description:\n
-                                xdx : Denotes how many dice to roll and how many sides the dice have.\n
-                            The following options are available:\n
-                                + - / * : Static modifier\n\n
-                                k# : How many dice to keep out of the roll, keeping highest value.\n
-                                r# : Reroll value.\n
-                                t# : Target number for a success.\n
-                                f# : Target number for a failure.\n"""
-                                # New option: letter + # or letter(if option doesnt need a number)
 
 ########
 # Ping #

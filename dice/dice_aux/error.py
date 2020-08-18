@@ -4,8 +4,6 @@ class Error():
         return self
         
     async def sendErrorToUser(self, context, helpCommand):
-        await context.send(f"{context.author.mention}\n"
-                           "{self.errorMessage}\n"
-                           "For more information type {helpCommand}")
+        await context.send(f'{context.author.mention}\n{self.errorMessage}\nFor more information type {helpCommand}')
         return self
 

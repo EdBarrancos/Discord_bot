@@ -10,7 +10,8 @@ from .dice_aux.dice import Dice
 from .dice_aux.error import Error
 from .constant_dice_main import *
 from .dice_aux.helful_functions import *
-from .quicksort import quicksort
+from .quicksort import sortRoll, sortingDirection
+from .options.options_impl import *
 
 
 class Roll:
@@ -23,18 +24,19 @@ class Roll:
         self.helpCommand = helpCommand
 
         dice = Dice()
-        await dice.processInputDice(_input)
-        if isinstance(dice, Error): return dice.sendErrorToUser(self.context, self.helpCommand)
+        dice = await dice.processInputDice(_input)
+        if isinstance(dice, Error): 
+            return await dice.sendErrorToUser(self.context, self.helpCommand)
 
         self.roll = await self.rolling(dice)
-        self.roll = await quicksort(self.roll, 0, len(self.roll) - 1, comparator=lambda a,b: a > b)
+        self.roll = await sort(self.roll, sortingDirection().biggestToLowest)
 
         finalStatement = await self.processOptions(dice)
 
         await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')      
 
-        if await crited(self.roll, dice.typeDice, dice.modifiers):
-            await self.crit(self.roll.count(eval(f'{dice.typeDice}{dice.modifiers}')))
+        if await crited(self.roll, dice):
+            await self.crit(self.roll.count(dice.getCeilingNumber()))
 
         return self
     
@@ -49,54 +51,54 @@ class Roll:
         for optionIndex, optionNumber in enumerate(dice.optionsFlags):
             if optionNumber is not None: 
                 if optionIndex == 0:
-                    self.roll = self.roll[:int(optionNumber)] # Make a Function for this
+                    self.roll = processKeepOption(self.roll, optionNumber)
                     final = await self.calculateFinal(self.roll)
                 #Fill out the rest
                 
         return final
     
+    
     async def calculateFinal(self, roll):
         return sum(roll)
-
+    
+    
     async def crit(self, totalNumbCrits):
         """ Celebrative message for the Critical hit """
-        critTimesStr = f'{totalNumbCrits} times!'
-        if totalNumbCrits == 1:
-            critTimesStr = EMPTYSTRING
+        critTimesStr = await self.getCriticalString(totalNumbCrits)
 
         msg = await self.context.send(f'F*** YEAH!! {self.context.author.mention} JUST CRITED! {critTimesStr}')
-        await msg.add_reaction(StarStruck)
-        await msg.add_reaction(MindBlowen)
-        await msg.add_reaction(Cursing)
-        await msg.add_reaction(PartyTime)
+        await self.addReactions(msg, criticalSuccessReactions)
 
         return self
+
+
+    async def addReactions(self, msg, reactions: tuple):
+        for react in reactions:
+            msg.add_reaction(react)
+            
+        return self
+    
+    
+    async def getCriticalString(self, totalNumbCrits):
+        criticalString = f'{totalNumbCrits} times!'
+        if totalNumbCrits == 1: criticalString = EMPTYSTRING
+        
+        return criticalString
 
 
     async def rolling(self, dice):
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
-
-        print("rolling")
-        print(dice.numDice)
         
         rolls = list()
         for _ in range(dice.numDice):
             
-            print("here for loop")
-            
-            toAddNumber = await dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice))
-            
-            print(toAddNumber)
-            
-            rolls.append(toAddNumber)
-            
-        print(rolls)
+            rolls.append(await dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice)))
         
         return rolls
     
     
 
-async def crited(listOfRolls: list, typeDice: str, modifier: str) -> bool:
+async def crited(listOfRolls: list, dice) -> bool:
         """ In list_of_roll is there a maximum value? """
-        return eval(f'{typeDice}{modifier}') in listOfRolls  
+        return dice.getCeilingNumber() in listOfRolls  
