@@ -1,4 +1,5 @@
 from enum import Enum
+from .constant_options import *
 
 class inputOptionsState(Enum):
     searching = 0
@@ -24,12 +25,17 @@ class Options():
         index = AllOptions.index(char)
         if char in OptionsOutNumber:
             await self.setOption(index, ACTIVE)
+        elif self.isEmpty(index):
+            await self.setOption(index, EMPTYSTRING)
         
         return index
     
     async def setOption(self, index, setValue):
         self.optionsFlags[index] = setValue
         return self
+    
+    async def isEmpty(self, idnex):
+        return  self.optionsFlags[index] == None
     
 
 class Modifier():
@@ -40,17 +46,3 @@ class Modifier():
     async def addCharacter(self, char):
         self.value += char
         return self
-
-ACTIVE = "1"
-EMPTYSTRING = ''
-
-Operators = "+-/*"
-
-OptionsWithNumber = "krtf"
-# Needs somesort of number
-OptionsOutNumber = ""
-#Doesnt require number
-
-AllOptions = OptionsWithNumber + OptionsOutNumber
-
-NumberOfOptions = len(AllOptions)

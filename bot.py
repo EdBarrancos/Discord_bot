@@ -102,20 +102,21 @@ async def add(ctx, *nbrs : int):
             aliases=RollAliases,
             help=RollHelpMessage,
             brief=RollBriefMessage)
-async def roll(ctx):
+async def roll(ctx, *args):
     """ Main Command
         Subcommands: 
             dice XdX [OPTIONS] """
-    if ctx.invoked_subcommand is None:
+    if len(args) == 0:
         await ctx.send(f'{ctx.author.mention} asked for dice, but gave none.\nIf you need help just type \"!help roll\"')
-         
+    else:
+        await _rollDice(ctx, args)
+        
    
-@roll.command(name=RollDiceSubcommandName,
-              aliases=RollDiceSubcommandAliases,
-              help=RollDiceSubcommandHelp)
-async def _rollDice(ctx, *dice):
+
+async def _rollDice(ctx, dice):
     """ Inputs random numbers depending on the command provided by the user
             !roll dice XdX [OPTIONS] """
+    print(dice)
     rolling = Roll()
     await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 
