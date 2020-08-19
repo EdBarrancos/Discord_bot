@@ -1,8 +1,3 @@
-""" 
-    File: bot.py
-    Author: Eduardo Barrancos
-    Description: Bot that manages a category in your server used for dnd or other games porposes
-"""
 import discord
 import asyncio
 import json

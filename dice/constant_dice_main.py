@@ -1,8 +1,3 @@
-""" 
-    File: constant_dice_main.py
-    Author: Eduardo Barrancos
-    Description: Store constants used on dice_main.py
-"""
 EMPTYSTRING = ''
 STARTROLL = 1
 

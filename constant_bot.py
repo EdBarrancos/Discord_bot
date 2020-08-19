@@ -1,9 +1,3 @@
-""" 
-    File: constant_bot.py
-    Author: Eduardo Barrancos
-    Description: Stores the constants used in bot.py
-"""
-
 COMMANDPREFIX = ('!', '$')
 # More can be added, using tuples
 
