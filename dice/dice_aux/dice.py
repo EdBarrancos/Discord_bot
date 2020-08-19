@@ -13,7 +13,7 @@ class Dice():
     async def getCeilingNumber(self):
         return eval(f'{self.typeDice}{self.modifiers}')
     
-    async def getModifiedNumber(self, number):
+    async def getModifiedNumber(self, number: int):
         return eval(f'{number}{self.modifiers}')
     
     async def processInputDice(self, _input):
@@ -90,7 +90,7 @@ class Dice():
         else: return {"modifiers": modifiers.value, "optionsFlags": optionsFlags.optionsFlags}
     
     
-    async def processRawInput(self, _input):
+    async def processRawInput(self, _input) -> dict:
         processedInput = dict()
         processedInput["dice"] = _input[0].lower()
         processedInput["dice"] = processedInput["dice"].split(DiceKeyLetter)
@@ -100,7 +100,7 @@ class Dice():
         return processedInput
         
         
-    async def processDiceInfo(self, diceInput):
+    async def processDiceInfo(self, diceInput) -> dict:
         diceInfo = dict()
     
         diceInfo["numDice"] = await self.processNumberOfDice(diceInput[0])
@@ -112,7 +112,7 @@ class Dice():
         return diceInfo
     
     
-    async def processTypeOfDice(self, typeDiceInput):
+    async def processTypeOfDice(self, typeDiceInput) -> int:
         typeDice = typeDiceInput
         
         try:
@@ -124,7 +124,7 @@ class Dice():
         return typeDice
     
     
-    async def processNumberOfDice(self, numDiceInput):
+    async def processNumberOfDice(self, numDiceInput) -> int:
         if numDiceInput == EMPTYSTRING: numDice = 1
         else:
             try:
@@ -135,5 +135,5 @@ class Dice():
         if not await self.validDiceInfo(numDice): return await Error().defineError("Dice information not introduced properly.")
         return numDice
         
-    async def validDiceInfo(self, info):
+    async def validDiceInfo(self, info: int) -> bool:
         return info > 0

@@ -1,9 +1,4 @@
-""" 
-    File: quicksort.py
-    Author: Eduardo Barrancos
-    Description: QuickSort functions
-"""
-import  asyncio
+import asyncio
 from enum import Enum
 
 class sortingDirection(Enum):
