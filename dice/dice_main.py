@@ -15,7 +15,7 @@ from .options.options_impl import *
 
 
 class Roll:
-    async def roll_dice(self, context, _input, helpCommand='help'):
+    async def roll_dice(self, context, _input: tuple, helpCommand='help': str):
         """ To add an Option:
             Expect a new index in the tuple
             Add a new index and the condicitons for it in the flag
@@ -36,14 +36,14 @@ class Roll:
         await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')      
 
         if await critedSuccess(self.roll, dice):
-            await self.crit(self.roll.count(await dice.getCeilingNumber()), criticalSuccessMessage, criticalSuccessReactions)
+            await self.sendCritMessageAndReaction(self.roll.count(await dice.getCeilingNumber()), criticalSuccessMessage, criticalSuccessReactions)
             
         if await critedFailure(self.roll, dice):
-            await self.crit(self.roll.count(await dice.getFloorNumber()), criticalFailureMessage, criticalFailureReactions)
+            await self.sendCritMessageAndReaction(self.roll.count(await dice.getFloorNumber()), criticalFailureMessage, criticalFailureReactions)
 
         return self
     
-    async def processOptionsReturnFinalStatement(self, dice):
+    async def processOptionsReturnFinalStatement(self, dice: Dice) -> int:
         # 0 -> Reroll values
         # 1 -> Keep dice out of the roll
         # 2 -> Target number for a success
@@ -62,7 +62,7 @@ class Roll:
         return final
 
     
-    async def crit(self, totalNumbCrits, critMessage, reactionsToAdd):
+    async def sendCritMessageAndReaction(self, totalNumbCrits: int, critMessage: str, reactionsToAdd: tuple):
         """ Celebrative message for the Critical hit """
         critTimesStr = await self.getCriticalString(totalNumbCrits)
 
@@ -79,14 +79,14 @@ class Roll:
         return self
     
     
-    async def getCriticalString(self, totalNumbCrits):
+    async def getCriticalString(self, totalNumbCrits: int) -> str:
         criticalString = f'{totalNumbCrits} times!'
         if totalNumbCrits == 1: criticalString = EMPTYSTRING
         
         return criticalString
 
 
-    async def rolling(self, dice):
+    async def rolling(self, dice: Dice) -> list:
         """ Returns a list with each individual rolls.
                 self.numDice elements each from 1 to self.typeDice  """
         
@@ -98,9 +98,9 @@ class Roll:
     
     
 
-async def critedSuccess(listOfRolls: list, dice) -> bool:
+async def critedSuccess(listOfRolls: list, dice: Dice) -> bool:
         """ In list_of_roll is there a maximum value? """
         return await dice.getCeilingNumber() in listOfRolls
     
-async def critedFailure(listOfRolls, dice):
+async def critedFailure(listOfRolls: list, dice: Dice):
     return await dice.getFloorNumber() in listOfRolls
