@@ -8,13 +8,9 @@ import asyncio
 import json
 from discord.ext import commands
 
-import sys
-sys.path.append('./dice')
-sys.path.append('./server-management')
-
 from constant_bot import *
-from channel_category import find_category, find_channel
-from dice import Dice
+from server_management.channel_category import find_category, find_channel
+from dice.dice_main import Roll
 
 
 
@@ -37,6 +33,7 @@ bot = commands.Bot(COMMANDPREFIX)
 
 @bot.event
 async def on_ready():
+    """ Triggers when the bot is done preparing the data received from Discord """
     print(f'We have logged in as {bot.user}')
 
     for guild in bot.guilds:
@@ -45,9 +42,9 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    """ When joinning a guild create channels and categories for the rpg management """
+    """ Triggers when joining a guild. Creates the category and channels managed by the bot """
 
-    print(f'In {guild}:')
+    print(f'Just entered {guild}.')
     dndcat = await find_category(guild, dndCategoryName)
     if not dndcat:
         dndcat = await guild.create_category(dndCategoryName)
@@ -70,19 +67,28 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_member_join(member):
+    """ Triggers when a new member joins the guild """
+    # Not tested
     await member.message(f'Hi, welcome {member.name}!')
 
 #####################
 ## Commands #########
 #####################
 
-@bot.command()
+@bot.command(name=PingName,
+            aliases=PingAliases,
+            help=PingHelpMessage,
+            brief=PingBriefMessage)
 async def ping(ctx):
     """ Ping? """
     await ctx.send('Pong!')
 
 
-@bot.command()
+
+@bot.command(name=AddName,
+            aliases=AddAliases,
+            help=AddHelpMessage,
+            brief=AddBriefMessage)
 async def add(ctx, *nbrs : int):
     """Adds numbers together"""
     sum = 0
@@ -91,33 +97,45 @@ async def add(ctx, *nbrs : int):
     await ctx.send(sum)
 
 
-@bot.command(help=HELPMESSAGE,
-            brief=""" Inputs random numbers depending on the command provided by the user
-            !roll XdX [OPTIONS]""")
-async def roll(ctx, *dice):
-    """ Inputs random numbers depending on the command provided by the user
-            !roll XdX [OPTIONS]"""
-    if len(dice) == 0:
-        await ctx.send(f'{ctx.author.nick} asked for dice, but gave none.\nIf you need help just type \"!roll help\"')
-    elif dice[0] == 'help':
-        #Help command
-         await ctx.send(HELPMESSAGE)
+
+@bot.group(name=RollName,
+            aliases=RollAliases,
+            help=RollHelpMessage,
+            brief=RollBriefMessage)
+async def roll(ctx, *args):
+    """ Main Command
+        Subcommands: 
+            dice XdX [OPTIONS] """
+    if len(args) == 0:
+        await ctx.send(f'{ctx.author.mention} asked for dice, but gave none.\nIf you need help just type \"!help roll\"')
     else:
-        rolling = Dice()
-        await rolling.main(ctx, dice, helpCommand='!help or !help roll')
+        await _rollDice(ctx, args)
+        
+   
 
+async def _rollDice(ctx, dice):
+    """ Inputs random numbers depending on the command provided by the user
+            !roll dice XdX [OPTIONS] """
+    rolling = Roll()
+    await rolling.roll_dice(ctx, dice, helpCommand='!help or !help roll')
 
-@bot.group()
+    
+    
+@bot.group(name=CoolName,
+            aliases=CoolAliases,
+            help=CoolHelpMessage,
+            brief=CoolBriefMessage)
 async def cool(ctx):
-    """Says if a user is cool.
+    """Says if a somthing is cool.
     In reality this just checks if a subcommand is being invoked.
     """
     if ctx.invoked_subcommand is None:
-        await ctx.send('No, {0.subcommand_passed} is not cool'.format(ctx))
+        await ctx.send(f'No, {ctx.subcommand_passed} is not cool')
 
 
-@cool.command(name='bot')
-async def _bot(ctx):
+@cool.command(name=BotName,
+                aliases=BotAliases)
+async def _bot(ctx, *data):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
 
