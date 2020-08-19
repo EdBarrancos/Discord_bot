@@ -17,11 +17,11 @@ class Options():
             
         return self
     
-    async def addCharacter(self, index, char):
+    async def addCharacter(self, index: int, char: str):
         self.optionsFlags[index] += char
         return self
     
-    async def getOptionsIndex(self, char):
+    async def getOptionsIndex(self, char: str) -> int:
         index = AllOptions.index(char)
         if char in OptionsOutNumber:
             await self.setOption(index, ACTIVE)
@@ -30,11 +30,11 @@ class Options():
         
         return index
     
-    async def setOption(self, index, setValue):
+    async def setOption(self, index: int, setValue):
         self.optionsFlags[index] = setValue
         return self
     
-    async def isEmpty(self, index):
+    async def isEmpty(self, index: int) -> bool:
         return  self.optionsFlags[index] == None
     
 
@@ -43,6 +43,6 @@ class Modifier():
         self.value = EMPTYSTRING
         return self
     
-    async def addCharacter(self, char):
+    async def addCharacter(self, char: str):
         self.value += char
         return self

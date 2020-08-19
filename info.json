@@ -7,8 +7,8 @@
     
     "Bot info":{
         "Name": "The GM",
-        "Source Code": "https://github.com/EdBarrancos/Discord_bot",
-        "Version": "0.0.0",
+        "Source Code": "https://github.com/EdBarrancos/The_GM",
+        "Version": "0.0.1",
         "Status": "In Progress",
         "Description": "Help Birdge the cap when playing Role Playing Games online(More specific Dungeons and Dragons) keeping track of xp, character levels, rolling dice and more."
     }

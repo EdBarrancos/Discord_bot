@@ -1,19 +1,15 @@
 from enum import Enum
 
-async def processKeepOption(vector, number):
-    
-    print(id(vector))
-    
-    vector =  vector[:int(number)]
-    return await calculateFinal(vector)
+async def processKeepOption(vector: list, number) -> list:
+    return vector[:int(number)]
     
     
-async def calculateFinalSum( roll):
+async def calculateFinalSum(roll: list) -> int:
         return sum(roll)
     
-class Options(Enum):
-    ReerollValues = 0
-    KeepDice = 1
-    TargetNumberSuccess = 2
-    TargetNumberFailure = 3
+
+ReerollValues = 0
+KeepDice = 1
+TargetNumberSuccess = 2
+TargetNumberFailure = 3
     
