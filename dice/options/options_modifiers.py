@@ -25,7 +25,7 @@ class Options():
         index = AllOptions.index(char)
         if char in OptionsOutNumber:
             await self.setOption(index, ACTIVE)
-        elif self.isEmpty(index):
+        elif await self.isEmpty(index):
             await self.setOption(index, EMPTYSTRING)
         
         return index
@@ -34,7 +34,7 @@ class Options():
         self.optionsFlags[index] = setValue
         return self
     
-    async def isEmpty(self, idnex):
+    async def isEmpty(self, index):
         return  self.optionsFlags[index] == None
     
 

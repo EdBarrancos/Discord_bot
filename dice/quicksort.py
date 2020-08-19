@@ -39,11 +39,12 @@ async def particion(vector: list, left: int, right: int, comparator: bool) -> in
     
     return i + 1
 
+
 async def sort(vector, keyWord, first=0, last=None):
     if last == None:
         last = len(vector) - 1
     
-    if keyWord == sortingDirection().biggestToLowest:
+    if keyWord == sortingDirection.biggestToLowest:
         return await quicksort(vector, first, last, comparator=lambda a,b: a > b)
-    elif keyWord == sortingDirection().lowestToBiggest:
+    elif keyWord == sortingDirection.lowestToBiggest:
         return await quicksort(vector, first, last)

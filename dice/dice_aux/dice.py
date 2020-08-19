@@ -7,6 +7,9 @@ from ..options.options_modifiers import *
 
 
 class Dice():
+    async def getFloorNumber(self):
+        return eval(f'{STARTROLL}{self.modifiers}')
+        
     async def getCeilingNumber(self):
         return eval(f'{self.typeDice}{self.modifiers}')
     
@@ -14,8 +17,6 @@ class Dice():
         return eval(f'{number}{self.modifiers}')
     
     async def processInputDice(self, _input):
-        
-        print("processInput")
         
         processedInput = await self.processRawInput( _input)
         
@@ -44,31 +45,21 @@ class Dice():
         
         state = inputOptionsState.searching
         
-        print(optionsInput)
-        
         for option in optionsInput:
             for char in option:
-                
-                print(char)
                 
                 if state is inputOptionsState.receivingAndStoringOptions:
                     if await isNumber(char): await optionsFlags.addCharacter(optionIndex, char)
                         # State stays the same
                     else: state = inputOptionsState.searching
                 
-                elif state is inputOptionsState.receivindAndStoringModifier:
-                    
-                    print("receiving and storing mod")
-                    
+                elif state is inputOptionsState.receivindAndStoringModifier: 
                     if await isNumber(char): await modifiers.addCharacter(char)
                         # State stays the same
                     else: state = inputOptionsState.searching
                         
                         
-                if state is inputOptionsState.searching:
-                    
-                    print("searching")
-                    
+                if state is inputOptionsState.searching:                 
                     if char in Operators:
                         await modifiers.addCharacter(char)
                         state = inputOptionsState.foundModifier
@@ -80,10 +71,7 @@ class Dice():
                     elif char in OptionsWithNumber:
                         state = inputOptionsState.receivingAndStoringOptions
                 
-                elif state is inputOptionsState.foundModifier:
-                    
-                    print("found mod")
-                    
+                elif state is inputOptionsState.foundModifier:   
                     if await isNumber(char):
                         await modifiers.addCharacter(char)
                         state = inputOptionsState.receivindAndStoringModifier
@@ -96,10 +84,6 @@ class Dice():
                     else: return await Error().defineError("Options wrongly formated")
                     
                 await asyncio.sleep(0.02)
-        
-        print("Getting mods")
-        print(modifiers.value)
-        print(optionsFlags.optionsFlags)
         
         if state is inputOptionsState.foundModifier or state is inputOptionsState.foundOption:
             return await Error().defineError("Options wrongly formated")

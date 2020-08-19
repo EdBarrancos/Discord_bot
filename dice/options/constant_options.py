@@ -3,7 +3,7 @@ EMPTYSTRING = ''
 
 Operators = "+-/*"
 
-OptionsWithNumber = "krtf"
+OptionsWithNumber = "rktf"
 # Needs somesort of number
 OptionsOutNumber = ""
 #Doesnt require number
