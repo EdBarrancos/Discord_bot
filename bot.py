@@ -100,7 +100,7 @@ async def add(ctx, *nbrs : int):
 async def roll(ctx, *args):
     """ Main Command
         Subcommands: 
-            dice XdX [OPTIONS] """
+            XdX [OPTIONS] """
     if len(args) == 0:
         await ctx.send(f'{ctx.author.mention} asked for dice, but gave none.\nIf you need help just type \"!help roll\"')
     else:
@@ -117,9 +117,9 @@ async def _rollDice(ctx, dice):
     
     
 @bot.group(name=CoolName,
-            aliases=CoolAliases,
-            help=CoolHelpMessage,
-            brief=CoolBriefMessage)
+           aliases=CoolAliases,
+           help=CoolHelpMessage,
+           brief=CoolBriefMessage)
 async def cool(ctx):
     """Says if a somthing is cool.
     In reality this just checks if a subcommand is being invoked.
@@ -129,11 +129,17 @@ async def cool(ctx):
 
 
 @cool.command(name=BotName,
-                aliases=BotAliases)
-async def _bot(ctx, *data):
+              aliases=BotAliases)
+async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
-
+    
+    
+@cool.command(name=BrunoName,
+              aliases=BrunoAliases)
+async def _bruno(ctx):
+    """ Is Bruno cool?  """
+    await ctx.send('Of course!')
 
 
 bot.run(TOKEN)
