@@ -1,7 +1,7 @@
 import asyncio
 
 from .constant_dice import *
-from .helful_functions import *
+from ..helful_functions import *
 from .error import Error
 from ..options.options_modifiers import *
 
@@ -16,6 +16,45 @@ class Dice():
     async def getModifiedNumber(self, number: int):
         return eval(f'{number}{self.modifiers}')
     
+    
+    async def rolling(self):
+        rolls = list()
+        for _ in range(self.numDice):
+            rolls.append(await self.getModifiedNumber(random.randint(STARTROLL, self.typeDice)))
+            
+        return rolls
+    
+    
+    async def createCustomDice(self, numDice, typeDice, modifiers, optionsFlags):
+        if numDice:
+            try: 
+                self.numDice = int(numDice)
+            except ValueError: return await Error().defineError("Custom Dice information not introduced properly.")
+
+            if not self.validDiceInfo(numDice): return await Error().defineError("Custom Dice information not introduced properly.")
+                
+        else: return await Error().defineError("Custom Dice information not introduced properly.")
+        
+        if typeDice:
+            try: 
+                self.typeDice = int(typeDice)
+            except ValueError: return await Error().defineError("Custom Dice information not introduced properly.")
+
+            if not self.validDiceInfo(typeDice): return await Error().defineError("Custom Dice information not introduced properly.")
+        else: return await Error().defineError("Custom Dice information not introduced properly.")
+        
+        if modifiers:
+            if isinstance(modifiers, Modifier): self.modifiers = modifiers
+            else: return await Error().defineError("Custom Dice information not introduced properly.")
+        else: self.modifiers = None
+            
+        if optionsFlags:
+            if isinstance(optionsFlags, Options): self.optionsFlags = optionsFlags
+            else: return await Error().defineError("Custom Dice information not introduced properly.")
+        else: self.optionsFlags = None
+
+        return self
+                
     async def processInputDice(self, _input):
         
         processedInput = await self.processRawInput( _input)

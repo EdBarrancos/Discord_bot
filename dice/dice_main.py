@@ -4,7 +4,7 @@ import asyncio
 from .dice_aux.dice import Dice
 from .dice_aux.error import Error
 from .constant_dice_main import *
-from .dice_aux.helful_functions import *
+from .helful_functions import *
 from .quicksort import sort, sortingDirection
 from .options.options_impl import *
 
@@ -20,7 +20,7 @@ class Roll:
         if isinstance(dice, Error): 
             return await dice.sendErrorToUser(self.context, self.helpCommand)
 
-        self.roll = await self.rolling(dice)
+        self.roll = await dice.rolling()
         self.roll = await sort(self.roll, sortingDirection.biggestToLowest)
 
         finalStatement = await self.processOptionsReturnFinalStatement(dice)
@@ -46,6 +46,10 @@ class Roll:
             if optionNumber is not None: 
                 if optionIndex == KeepDice:       
                     self.roll = await processKeepOption(self.roll, optionNumber)
+                    final = await calculateFinalSum(self.roll)
+                elif optionIndex == RerollValues:
+                    self.roll == await processRerollValues(self.roll, optionNumber, self.dice)
+                    self.roll = await sort(self.roll, sortingDirection.biggestToLowest)
                     final = await calculateFinalSum(self.roll)
                 #Fill out the rest
                 
@@ -75,16 +79,7 @@ class Roll:
         criticalString = f'{totalNumbCrits} times!'
         if totalNumbCrits == 1: criticalString = EMPTYSTRING
         
-        return criticalString
-
-
-    async def rolling(self, dice: Dice) -> list: 
-        rolls = list()
-        for _ in range(dice.numDice):
-            rolls.append(await dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice)))
-        
-        return rolls
-    
+        return criticalString    
     
 
 async def critedSuccess(listOfRolls: list, dice: Dice) -> bool:
