@@ -10,7 +10,7 @@ async def findIndexes(vector: list, element) -> list:
         
     return indexesList
 
-async def deleteIndexes(vector: list, indexesToDelete; list) -> list:
+async def deleteIndexes(vector: list, indexesToDelete: list) -> list:
     for index in indexesToDelete: 
         del vector[index]
         
