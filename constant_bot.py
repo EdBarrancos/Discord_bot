@@ -63,3 +63,10 @@ CoolBriefMessage = "Are you cool? I know I am!"
 
 BotName = "bot"
 BotAliases = ("you", "You")
+
+#############
+##### Bruno #
+#############
+
+BrunoName = "Bruno"
+BrunoAliases = ("bruno",)

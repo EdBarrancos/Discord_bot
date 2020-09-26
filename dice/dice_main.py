@@ -4,7 +4,7 @@ import asyncio
 from .dice_aux.dice import Dice
 from .dice_aux.error import Error
 from .constant_dice_main import *
-from .dice_aux.helful_functions import *
+from .helful_functions import *
 from .quicksort import sort, sortingDirection
 from .options.options_impl import *
 
@@ -20,12 +20,12 @@ class Roll:
         if isinstance(dice, Error): 
             return await dice.sendErrorToUser(self.context, self.helpCommand)
 
-        self.roll = await self.rolling(dice)
+        self.roll = await dice.rolling()
         self.roll = await sort(self.roll, sortingDirection.biggestToLowest)
 
         finalStatement = await self.processOptionsReturnFinalStatement(dice)
 
-        await self.context.send(f'{self.context.author.mention} rolled:`{self.roll}`. Which means:`{finalStatement}`')      
+        await self.sendOutputMessage(finalStatement)
 
         if await critedSuccess(self.roll, dice):
             await self.sendCritMessageAndReaction(self.roll.count(await dice.getCeilingNumber()), criticalSuccessMessage, criticalSuccessReactions)
@@ -35,6 +35,17 @@ class Roll:
 
         return self
     
+
+    async def sendOutputMessage(self, outputObject):
+        msg = await self.context.send(f'{self.context.author.mention}')
+        if outputObject.roll:
+            msg = await self.context.send(f'Rolled: `{outputObject.roll}`')
+        if outputObject.finalMessage:
+            msg = await self.context.send(f'Which Means: `{outputObject.finalMessage}`')
+        if outputObject.reactions:
+            await self.addReactions(msg, outputObject.reactions)
+
+
     async def processOptionsReturnFinalStatement(self, dice: Dice) -> int:
         # 0 -> Reroll values
         # 1 -> Keep dice out of the roll
@@ -45,8 +56,17 @@ class Roll:
         for optionIndex, optionNumber in enumerate(dice.optionsFlags):
             if optionNumber is not None: 
                 if optionIndex == KeepDice:       
-                    self.roll = await processKeepOption(self.roll, optionNumber)
-                    final = await calculateFinalSum(self.roll)
+                    final = await processKeepOption(self.roll, optionNumber)
+ 
+                elif optionIndex == RerollValues:
+                   final = await processRerollValues(self.roll, optionNumber, self.dice)
+
+                elif optionIndex == TargetNumberSuccess:
+                    final = await processTargetNumberSuccess(self.roll, optionNumber)
+
+                elif optionIndex == TargetNumberFailure:
+                    final = await processTargetNumberFailure(self.roll, optionNumber)
+
                 #Fill out the rest
                 
             await asyncio.sleep(0.02)
@@ -75,16 +95,7 @@ class Roll:
         criticalString = f'{totalNumbCrits} times!'
         if totalNumbCrits == 1: criticalString = EMPTYSTRING
         
-        return criticalString
-
-
-    async def rolling(self, dice: Dice) -> list: 
-        rolls = list()
-        for _ in range(dice.numDice):
-            rolls.append(await dice.getModifiedNumber(random.randint(STARTROLL, dice.typeDice)))
-        
-        return rolls
-    
+        return criticalString    
     
 
 async def critedSuccess(listOfRolls: list, dice: Dice) -> bool:

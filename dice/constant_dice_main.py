@@ -12,7 +12,10 @@ Cursing = "\U0001F92C"
 PartyTime = "\U0001F973"
 Scream = "\U0001F631"
 MiddleFinger = "\U0001F595"
+Crying = "\U0001F62D"
 
 
 criticalSuccessReactions = (StarStruck, MindBlown, Cursing, PartyTime )
 criticalFailureReactions = (Cursing, PartyTime, Scream, MiddleFinger)
+TargetNumberSuccessReactions = (StarStruck)
+TargetNumberFailureReactions = (Scream, Crying)
