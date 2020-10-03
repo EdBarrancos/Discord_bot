@@ -1,6 +1,6 @@
 import discord
 import asyncio
-import json
+from decouple import config
 from discord.ext import commands
 
 from constant_bot import *
@@ -10,11 +10,7 @@ from dice.dice_main import Roll
 
 
 # Import TOKEN
-import os
-os.chdir('../')
-with open("Discord_bot.json", "r") as f:
-    data = json.load(f)
-    TOKEN = data['token']
+TOKEN = config('TOKEN')
 
 
 # The bot instance

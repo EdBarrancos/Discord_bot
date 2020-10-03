@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 from .constant_dice import *
 from ..helful_functions import *
